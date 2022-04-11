@@ -16,10 +16,11 @@ import {Server_Url,fetchResponse} from "../BackendServices/FetchServices"
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import {useHistory} from "react-router-dom"
 import RunQuery from "./RunQuery"
+import TableData from './TableData';
 export default function MainListItems(props){
   const history=useHistory()
   const [getTable,setTable]=useState({tablesName:[]})
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const handleSetContent=props.handleSetContent
   const fetchTable=async()=>{
       let body={dbname:localStorage.getItem("dbname")}
@@ -29,7 +30,7 @@ export default function MainListItems(props){
       }
   }
   const handleShowTable=(table)=>{
-    console.log(table)
+    handleSetContent(<TableData handleSetContent={handleSetContent} fetchTable={fetchTable} tablename={table.name}/>)
   }
   useEffect(()=>{
       fetchTable()

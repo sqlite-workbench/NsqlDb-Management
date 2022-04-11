@@ -10,24 +10,11 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MainListItems from './listItems';
 import {useHistory} from "react-router-dom"
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import RunQuery from './RunQuery';
 
 const drawerWidth = 240;
 
@@ -79,7 +66,7 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
-  const [getContent,setContent]=React.useState(<></>)
+  const [getContent,setContent]=React.useState(<RunQuery/>)
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -151,9 +138,8 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth="lg" >
             {getContent}
-            <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
       </Box>
