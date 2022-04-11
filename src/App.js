@@ -3,6 +3,7 @@ import Home from "./Component/Home"
 import {Switch,Route} from "react-router-dom"
 import DbManagment from "./Component/DbManagment";
 import Dashboard from "./Component/Dashboard";
+import UploadDatabase from "./Component/UploadDatabase";
 function App() {
   return (
     <>
@@ -20,6 +21,9 @@ function App() {
       </Route>
       <Route exact path="/dashboard">
          <Dashboard/>
+      </Route>
+      <Route exact path="/uploaddb">
+         <UploadDatabase/>
       </Route>
     </Switch>
     </>

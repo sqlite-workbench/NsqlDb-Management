@@ -1,8 +1,8 @@
 const axios=require("axios")
 let Server_Url="https://nsqldb.glitch.me"
-const fetchResponse=async(url,body,method)=>{
+const fetchResponse=async(url,body,config={"content-type":"application/json"})=>{
     try{
-        let res=await axios.post(`${Server_Url}${url}`,body)
+        let res=await axios.post(`${Server_Url}${url}`,body,config)
         res=res.data
         return [true,res];
     

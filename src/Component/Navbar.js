@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useHistory } from 'react-router-dom';
 
@@ -25,7 +24,6 @@ export default function Navbar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const menuId = 'primary-search-account-menu';
   
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -61,7 +59,7 @@ export default function Navbar(props) {
         </IconButton>
         
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={()=>{history.push("/uploaddb")}}>
         <IconButton
           size="small"
           aria-label="account of current user"
@@ -69,9 +67,8 @@ export default function Navbar(props) {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          Upload Db
         </IconButton>
-        <p>Login</p>
       </MenuItem>
     </Menu>
   );
@@ -84,6 +81,8 @@ export default function Navbar(props) {
           <Typography
             variant="h6"
             noWrap
+            style={{cursor:"pointer"}}
+            onClick={()=>{history.replace({pathname:"/"})}}
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
@@ -103,15 +102,16 @@ export default function Navbar(props) {
               Create Db
             </IconButton>
             <IconButton
-              size="large"
+            onClick={()=>{history.push("/uploaddb")}}
+              size="small"
               edge="end"
               aria-label="account of current user"
-              aria-controls={menuId}
+              
               aria-haspopup="true"
               
               color="inherit"
             >
-              <AccountCircle />
+              Upload Db
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

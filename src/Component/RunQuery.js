@@ -42,12 +42,12 @@ export default function RunQuery() {
             <Button variant="outlined" onClick={()=>{setQuery("");setResponse("")}} color="primary">Clear</Button>
         </Grid>
         </Grid>
-        <Grid item xs={12} style={{margin:10,fontSize:30,fontWeight:"bold",textAlign:"center"}}>
+        {getResponse.length!==0?<><Grid item xs={12} style={{margin:10,fontSize:30,fontWeight:"bold",textAlign:"center"}}>
             Response
         </Grid>
-        <Grid item xs={12}>
-            <TextField disabled multiline rows={getResponse.matchAll("\n")+1} value={getResponse} variant="outlined" label="Response"  fullWidth/>
-        </Grid>
+        <Grid item xs={12} style={{marginBottom:20}}>
+            <TextField disabled multiline rows={10} value={getResponse} variant="outlined" label="Response"  fullWidth/>
+        </Grid></>:<></>}
         </Grid>
     </div>
   )

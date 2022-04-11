@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react';
-import PropTypes from 'prop-types';
 import {Button,Grid,TextField} from '@mui/material';
+import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -68,7 +68,6 @@ export default function DbDialog(props) {
   };
 const handleChange=(e,item)=>{
     let obj=getValues
-    // console.log("Object : ",obj)
     if(props.isUpdate){
         obj[item]['new']=e.currentTarget.value
         setValues(obj)
@@ -83,7 +82,6 @@ const handleChange=(e,item)=>{
 const handleAddRecord=async()=>{
     if(props.isUpdate){
         let body={dbname:localStorage.getItem("dbname"),tablename:props.tablename,data:getValues}
-        console.log("Body : ",body)
         let res=await updateResponse("/updatedata",body)
         if(res[0]){
             alert("Update Data SuccessFully")

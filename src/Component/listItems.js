@@ -8,15 +8,18 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PeopleIcon from '@mui/icons-material/People';
-import BarChartIcon from '@mui/icons-material/BarChart';
+import StorageIcon from '@mui/icons-material/Storage';
+import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
+import TableViewIcon from '@mui/icons-material/TableView';
+import BackupTableIcon from '@mui/icons-material/BackupTable';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import {Server_Url,fetchResponse} from "../BackendServices/FetchServices"
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import LogoutIcon from '@mui/icons-material/Logout';
 import {useHistory} from "react-router-dom"
 import RunQuery from "./RunQuery"
 import TableData from './TableData';
+import CreateTable from './CreateTable';
 export default function MainListItems(props){
   const history=useHistory()
   const [getTable,setTable]=useState({tablesName:[]})
@@ -55,9 +58,15 @@ export default function MainListItems(props){
         </ListItemIcon>
         <ListItemText primary="Open Database"/>
       </ListItemButton>
-      <ListItemButton>
+      <ListItemButton  onClick={()=>{history.push("/uploaddb")}} >
         <ListItemIcon>
           <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="Upload Database"/>
+      </ListItemButton>
+      <ListItemButton onClick={()=>{localStorage.clear();history.replace({pathname:"/"})}}>
+        <ListItemIcon>
+          <LogoutIcon />
         </ListItemIcon>
         <ListItemText primary="Logout" />
       </ListItemButton>
@@ -67,19 +76,19 @@ export default function MainListItems(props){
   <React.Fragment>
     <ListItemButton onClick={()=>{fetchTable()}}>
       <ListItemIcon>
-        <DashboardIcon />
+        <StorageIcon />
       </ListItemIcon>
       <ListItemText primary={localStorage.getItem("dbname")} />
     </ListItemButton>
     <ListItemButton onClick={()=>{handleSetContent(<RunQuery/>)}} >
       <ListItemIcon>
-        <DashboardIcon />
+        <KeyboardCommandKeyIcon /> 
       </ListItemIcon>
       <ListItemText primary="Run Query" />
     </ListItemButton>
     <ListItemButton onClick={handleClick}>
-      <ListItemIcon>
-        <ShoppingCartIcon />
+      <ListItemIcon> 
+        <TableViewIcon />
       </ListItemIcon>
       <ListItemText primary="Tables" />
       {open ? <ExpandLess /> : <ExpandMore />}
@@ -89,6 +98,9 @@ export default function MainListItems(props){
           {getTable['tablesName'].map((item)=>{
             return(
               <ListItemButton sx={{ pl: 4 }} onClick={()=>handleShowTable(item)}>
+              <ListItemIcon> 
+              <TableViewIcon />
+            </ListItemIcon>
               <ListItemText primary={item.name} />
             </ListItemButton>
             )
@@ -96,9 +108,9 @@ export default function MainListItems(props){
 }
         </List>
       </Collapse>
-    <ListItemButton>
+    <ListItemButton onClick={()=>{handleSetContent(<CreateTable fetchTable={fetchTable} setComponent={handleSetContent}/>)}}>
       <ListItemIcon>
-        <PeopleIcon />
+        <BackupTableIcon />
       </ListItemIcon>
       <ListItemText primary="Create Table" />
     </ListItemButton>
@@ -106,7 +118,7 @@ export default function MainListItems(props){
     <ListItemButton>
 
       <ListItemIcon>
-        <BarChartIcon />
+        <CloudDownloadIcon />
       </ListItemIcon>
       <ListItemText primary="Download Database" onClick={()=>{window.history.location.href=`${Server_Url}/databasefile/${localStorage.getItem("dbname")}.db`}} />
     </ListItemButton>

@@ -12,7 +12,7 @@ export default function TableData(props) {
         let body={dbname:localStorage.getItem("dbname"),tablename:props.tablename}
         let res=await fetchResponse("/getalldata",body)
         if(res[0]){
-            console.log(res[1].data)
+            
             setData({data:res[1].data})
         }
         else{
@@ -23,7 +23,6 @@ export default function TableData(props) {
         let body={dbname:localStorage.getItem("dbname"),tablename:props.tablename}
         let res=await fetchResponse("/tableinfo",body)
         if(res[0]){
-            console.log(res[1].data)
             let data=res[1].data
             setColumn({column:data})
             // let outPut=[]

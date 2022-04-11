@@ -20,7 +20,7 @@ export default function DbTable(props) {
     if(user_want){
 
       let body={data:{"dbname":localStorage.getItem("dbname"),"tablename":props.tablename,user:row}}
-      console.log(body)
+      
     let res=await deleteResponse("/deletedata",body)
     if(res[0]){
       alert("Record Deleted")
@@ -31,7 +31,6 @@ export default function DbTable(props) {
     }
   }
   }
-  console.log(getRow)
   return (
     <>
     <TableContainer component={Paper}>
