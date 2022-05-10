@@ -12,7 +12,7 @@ export default function UploadDatabase(props) {
             if(getDb.bytes!==""){
                 let body=new FormData()
                 body.append("database",getDb.bytes)
-                let config={"content-type":"multipart/form-data"}
+                let config={headers:{"content-type":"multipart/form-data",auth:localStorage.getItem("auth")}}
                 let res=await fetchResponse("/uploaddb",body,config)
                 if(res[0]){
                     let filename=(res[1].filename)
@@ -21,9 +21,8 @@ export default function UploadDatabase(props) {
                             alert("Server Error...")
                     }
                     else{
-                        filename=filename.substring(0,filename.length-3)
                         localStorage.setItem("dbname",filename)
-                        history.replace({"pathname":"/dashboard"})
+                        history.replace({"pathname":"/database"})
                     }
                 }
                 else{

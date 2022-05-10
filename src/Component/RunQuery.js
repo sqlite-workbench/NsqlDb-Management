@@ -7,16 +7,24 @@ export default function RunQuery() {
     const handleClick=async()=>{
         try{
             if(getQuery!==""){
-                let body={dbname:localStorage.getItem("dbname"),query:getQuery}
+                let querySet=getQuery.split(";")
+                for(let query of querySet){
+                    if(query===""){
+                        continue;
+                    }
+                    
+                    let body={dbname:localStorage.getItem("dbname"),query}
                 let res=await fetchResponse("/run",body)
                 
                 if(res[0])
-                    setResponse(JSON.stringify(res[1].data))
-                else
-                    setResponse(JSON.stringify(res[1]))
+                    res=getResponse+JSON.stringify(res[1].data)+"\n"
+                    else
+                    res=getResponse+JSON.stringify(res[1])+"\n"
+                setResponse(res);
+                }
             }
-            else{
-                alert("Write Some Query Please")
+                else{
+                    alert("Write Some Query Please")
             }
             
         }
@@ -31,7 +39,7 @@ export default function RunQuery() {
                 Run Query
             </Grid>
         <Grid item xs={12}>
-            <TextField multiline rows={10} value={getQuery} onChange={(e)=>{setQuery(e.currentTarget.value)}} variant="outlined" label="Query"  fullWidth/>
+            <TextField multiline rows={10} value={getQuery} onChange={(e)=>{setQuery(e.currentTarget.value);setResponse("")}} variant="outlined" label="Query"  fullWidth/>
         </Grid>
         <Grid xs={12} style={{display:"flex"}}>
 

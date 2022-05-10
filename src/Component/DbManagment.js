@@ -8,10 +8,10 @@ export default function DbManagment(props) {
     const handleClick=async()=>{
             if(getDbName!==""){
                 let body={dbname:getDbName}
-                let res=await fetchResponse("/",body,"post")
+                let res=await fetchResponse("/",body)
                 if(res[0]){
                     localStorage.setItem("dbname",getDbName)
-                    history.replace({"pathname":"/dashboard"})
+                    history.replace({"pathname":"/database"})
                 }
                 else{
                     alert(res[1])

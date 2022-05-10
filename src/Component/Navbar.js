@@ -44,8 +44,8 @@ export default function Navbar(props) {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size="small" onClick={()=>{history.push("/opendb")}} aria-label="show 4 new mails" color="inherit">
-          Open Db
+        <IconButton size="small" onClick={()=>{history.replace({pathname:"/"})}} aria-label="show 4 new mails" color="inherit">
+          Home
         </IconButton>
       </MenuItem>
       <MenuItem>
@@ -53,13 +53,13 @@ export default function Navbar(props) {
           size="small"
           aria-label="show 17 new notifications"
           color="inherit"
-          onClick={()=>{history.push("/createdb")}}
+          onClick={()=>{history.replace({pathname:"/documentation"})}}
         >
-          Create Db
+          Documentation
         </IconButton>
         
       </MenuItem>
-      <MenuItem onClick={()=>{history.push("/uploaddb")}}>
+      <MenuItem onClick={()=>{history.replace({pathname:"/login"})}}>
         <IconButton
           size="small"
           aria-label="account of current user"
@@ -67,7 +67,7 @@ export default function Navbar(props) {
           aria-haspopup="true"
           color="inherit"
         >
-          Upload Db
+          Login
         </IconButton>
       </MenuItem>
     </Menu>
@@ -90,28 +90,27 @@ export default function Navbar(props) {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="small" aria-label="show 4 new mails" color="inherit" onClick={()=>{history.push("/opendb")}}>
-              Open Db
+            <IconButton size="small" aria-label="show 4 new mails" color="inherit" onClick={history.replace({pathname:"/"})}>
+              Home
             </IconButton>
             <IconButton
               size="small"
               aria-label="show 17 new notifications"
               color="inherit"
-              onClick={()=>{history.push("/createdb")}}
+              onClick={()=>{history.replace({pathname:"/documentation"})}}
             >
-              Create Db
+              Documentation
             </IconButton>
             <IconButton
-            onClick={()=>{history.push("/uploaddb")}}
+            onClick={()=>{history.replace({pathname:"/login"})}}
               size="small"
               edge="end"
               aria-label="account of current user"
-              
               aria-haspopup="true"
               
               color="inherit"
             >
-              Upload Db
+              Login
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

@@ -2,8 +2,11 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 export default function Home() {
     const history=useHistory()
-    if(localStorage.getItem("dbname")){
+    if(localStorage.getItem("auth") && !localStorage.getItem("dbname")){
         history.replace({pathname:"/dashboard"})
+    }
+    else if(localStorage.getItem("dbname")){
+        history.replace({pathname:"/database"}) 
     }
   return (
       <div style={{width:"100%"}}>

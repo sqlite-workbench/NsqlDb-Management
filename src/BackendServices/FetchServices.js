@@ -1,6 +1,7 @@
 const axios=require("axios")
 let Server_Url="https://nsqldb.glitch.me"
-const fetchResponse=async(url,body,config={"content-type":"application/json"})=>{
+// let Server_Url="http://localhost:5000"
+const fetchResponse=async(url,body,config={headers:{"content-type":"application/json",auth:localStorage.getItem("auth")}})=>{
     try{
         let res=await axios.post(`${Server_Url}${url}`,body,config)
         res=res.data
@@ -17,9 +18,9 @@ const fetchResponse=async(url,body,config={"content-type":"application/json"})=>
         }
     }
 }
-const deleteResponse=async(url,body)=>{
+const deleteResponse=async(url,body,config={headers:{"content-type":"application/json",auth:localStorage.getItem("auth")}})=>{
     try{
-        let res=await axios.delete(`${Server_Url}${url}`,body)
+        let res=await axios.post(`${Server_Url}${url}`,body,config)
         res=res.data
         return [true,res];
     
@@ -34,9 +35,9 @@ const deleteResponse=async(url,body)=>{
         }
     }
 }
-const updateResponse=async(url,body)=>{
+const updateResponse=async(url,body,config={headers:{"content-type":"application/json",auth:localStorage.getItem("auth")}})=>{
     try{
-        let res=await axios.put(`${Server_Url}${url}`,body)
+        let res=await axios.post(`${Server_Url}${url}`,body,config)
         res=res.data
         return [true,res];
     

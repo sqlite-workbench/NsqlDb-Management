@@ -19,7 +19,7 @@ export default function DbTable(props) {
     let user_want=window.confirm("Are You Sure You Want to delete")
     if(user_want){
 
-      let body={data:{"dbname":localStorage.getItem("dbname"),"tablename":props.tablename,user:row}}
+      let body={"dbname":localStorage.getItem("dbname"),"tablename":props.tablename,user:row}
       
     let res=await deleteResponse("/deletedata",body)
     if(res[0]){

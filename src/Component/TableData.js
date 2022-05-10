@@ -43,7 +43,7 @@ export default function TableData(props) {
     const handleDropTable=async()=>{
         let user_want=window.confirm(`Are You Sure You Want to Drop '${props.tablename}' Table`)
     if(user_want){
-      let body={data:{"dbname":localStorage.getItem("dbname"),"tablename":props.tablename}}
+      let body={"dbname":localStorage.getItem("dbname"),"tablename":props.tablename}
     let res=await deleteResponse("/droptable",body)
     if(res[0]){
         alert("Table Deleted")

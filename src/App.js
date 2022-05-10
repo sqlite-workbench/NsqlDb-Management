@@ -1,29 +1,33 @@
 import Navbar from "./Component/Navbar"
 import Home from "./Component/Home"
 import {Switch,Route} from "react-router-dom"
-import DbManagment from "./Component/DbManagment";
 import Dashboard from "./Component/Dashboard";
-import UploadDatabase from "./Component/UploadDatabase";
+import Login from "./Component/Login";
+import SignUp from "./Component/SignUp";
+import UserDashboard from "./Component/UserDashboard";
+import Documentation from "./Component/Documentation";
 function App() {
   return (
     <>
       <Navbar/>
     <Switch>
       <Route exact path="/">
-        
         <Home/>
       </Route>
-      <Route exact path="/createdb">
-          <DbManagment key={1} heading={"Create Db"} isOpen={false} />
+      <Route exact path="/documentation">
+        <Documentation/>
       </Route>
-      <Route exact path="/opendb">
-          <DbManagment key={2} heading={"Open Db"} isOpen={true} />
-      </Route>
-      <Route exact path="/dashboard">
+      <Route exact path="/database">
          <Dashboard/>
       </Route>
-      <Route exact path="/uploaddb">
-         <UploadDatabase/>
+      <Route exact path="/dashboard">
+         <UserDashboard/>
+      </Route>
+      <Route exact path="/login">
+         <Login/>
+      </Route>
+      <Route exact path="/signup">
+         <SignUp/>
       </Route>
     </Switch>
     </>
