@@ -1,10 +1,13 @@
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
 import {fetchResponse} from "../BackendServices/FetchServices"
 import {Grid,TextField,Button} from "@mui/material"
+import ContextRouter from "../contextAPI/ContextRouter"
 export default function RunQuery() {
+    const context=useContext(ContextRouter)
     const [getQuery,setQuery]=useState("")
     const [getResponse,setResponse]=useState("")
     const handleClick=async()=>{
+        context.setLoader(true)
         try{
             if(getQuery!==""){
                 let querySet=getQuery.split(";")
@@ -13,24 +16,25 @@ export default function RunQuery() {
                         continue;
                     }
                     
-                    let body={dbname:localStorage.getItem("dbname"),query}
+                    let body={dbname:context.getDatabase,query}
                 let res=await fetchResponse("/run",body)
                 
-                if(res[0])
-                    res=getResponse+JSON.stringify(res[1].data)+"\n"
+                if(res.status)
+                    res=getResponse+JSON.stringify(res.data)+"\n"
                     else
-                    res=getResponse+JSON.stringify(res[1])+"\n"
+                    res=getResponse+JSON.stringify(res.err)+"\n"
                 setResponse(res);
                 }
             }
                 else{
-                    alert("Write Some Query Please")
+                    context.setAlert({status:true,msg:"Write Some Query First",color:'red'})
             }
             
         }
         catch(e){
             setResponse(e.message)
         }
+        context.setLoader(false)
     }
   return (
     <div>

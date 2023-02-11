@@ -1,0 +1,98 @@
+.create-table-main-div{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    /* overflow: auto; */
+}
+.ct-sub-div{
+    width: 90%;
+    height: 100%;
+    display: flex;
+    border: 1px solid black;
+    padding: 10px;
+    flex-direction: column;
+}
+.heading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 5%;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    font-weight: 350;
+    font-style: italic;
+}
+.ct-tablename{
+    display: flex;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 5%;
+    justify-content: center;
+    align-items: center;
+}
+.text-area{
+    width: 70%;
+}
+
+.ct-addcolumn{
+    display: flex;
+    justify-content: center;
+    width: 30%;
+}
+.ct-addcolumn button{
+    font-size: 18px;
+    font-weight: 350;
+    font-style: italic;
+    padding: 17px;
+    cursor: pointer;
+    color: white;
+    background-color: skyblue;
+    border-radius: 20px;
+}
+.ct-main-window{
+    width: 100%;
+    margin-top: 20px;
+    height: 30%;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+.table-cell-main{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.table-cell-sub{
+    width: 100%;
+    height: 100%;
+}
+.table-main{
+    padding: 10px;
+    width: 100%;
+    border: 1px solid gray;
+}
+.table-head{
+    width: 100%;
+}
+.main-row{
+    width: 100%;
+}
+.main-row th{
+    font-size: 17px;
+    font-weight: 400;
+    font-style: italic;
+    width: 13%;
+}
+.table-rows{
+    width: 100%;
+}
+.action-btn{
+    cursor: pointer;
+}
+.table-rows th{
+    width: 12%;
+    text-align: center;
+}

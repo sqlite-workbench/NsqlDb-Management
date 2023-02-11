@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import MainListItems from './listItems';
+import MainListItems from './MainListItems';
 import {useHistory} from "react-router-dom"
 import RunQuery from './RunQuery';
 

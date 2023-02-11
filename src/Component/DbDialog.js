@@ -9,6 +9,8 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import {fetchResponse,updateResponse} from "../BackendServices/FetchServices"
+import { useContext } from 'react';
+import ContextRouter from '../contextAPI/ContextRouter';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
@@ -50,6 +52,7 @@ BootstrapDialogTitle.propTypes = {
 export default function DbDialog(props) {
   const [getValues,setValues]=useState({})
   const [getRun,setRun]=useState(false)
+  const context=useContext(ContextRouter)
   useEffect(()=>{
       let obj={}
         for(let key of props.column){
@@ -80,16 +83,17 @@ const handleChange=(e,item)=>{
     }
 }
 const handleAddRecord=async()=>{
+  context.setLoader(true)
     if(props.isUpdate){
-        let body={dbname:localStorage.getItem("dbname"),tablename:props.tablename,data:getValues}
+        let body={dbname:context.getDatabase,tablename:props.tablename,data:getValues}
         let res=await updateResponse("/updatedata",body)
-        if(res[0]){
-            alert("Update Data SuccessFully")
+        if(res.status){
+          context.setAlert({status:true,msg:"Data Updated",color:"green"})
             handleClose()
             props.fetchData()
         }
         else{
-            alert(res[1])
+          context.setAlert({status:true,msg:res.err,color:"red"})
         }
     }
     else{
@@ -105,21 +109,22 @@ const handleAddRecord=async()=>{
     if(columns.length!==0){
         response=response.substring(0,response.length-1)+")"
         columns=`(${columns.join(",")})`
-        let body={dbname:localStorage.getItem("dbname"),tablename:props.tablename,columnname:columns,columnvalues:response}
+        let body={dbname:context.getDatabase,tablename:props.tablename,columnname:columns,columnvalues:response}
         let res=await fetchResponse("/insertdata",body)
-        if(res[0]){
-            alert("Insert Data SuccessFully")
+        if(res.status){
+            context.setAlert({status:true,msg:"Data Inserted",color:"green"})
             handleClose()
             props.fetchData()
         }
         else{
-            alert(res[1])
+          context.setAlert({status:true,msg:res.err,color:"red"})
         }
     }
     else{
-        alert("Write Some Calues")
+      context.setAlert({status:true,msg:"Write Some Values",color:"yellow"})
     }
     }
+    context.setLoader(false)
 }
   return (
     <div>

@@ -1,0 +1,77 @@
+.user-nav-main{
+    width: 100%;
+    height: 10vh;
+    display: flex;
+}
+.user-nav-sub{
+
+    border-bottom: 1px solid rgb(38, 38, 56);;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+.user-nav-icon{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 50%;
+    letter-spacing: 1.5px;
+    color: rgb(38, 38, 56);
+    height: 100%;
+    font-size: 2em;
+    font-weight: 350;
+    font-style: italic;
+}
+.user-nav-icon img{
+    width: 20%;
+    height: 100%;
+}
+.user-nav-profile{
+    width: 48%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.user-nav-profile button{
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    text-transform: capitalize;
+    padding: 10px;
+    border: 0.5px solid rgb(38, 38, 56);;
+    padding-inline: 20px;
+    border-radius: 30px;
+    background-color: rgb(208, 204, 204);
+    color: white;
+    font-size: 20px;
+    font-weight: 400;
+    font-style: italic;
+}
+.user-profile{
+    width: 100%;
+    font-style: italic;
+    font-weight: 350;
+    font-size: 18px;
+    text-align: center;
+}
+
+.username{
+    margin-block: 5px;
+}
+
+.otherinfo{
+    margin-block: 5px;
+}
+
+.user-emailid{
+    margin-block: 5px;
+}
+
+.user-contact{
+    margin-block: 5px;
+}
+
+.apikey{
+    margin-block: 5px;
+    font-size: 14px;
+}

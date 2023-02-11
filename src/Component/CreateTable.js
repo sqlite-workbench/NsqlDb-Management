@@ -1,23 +1,20 @@
 import React,{useState} from 'react'
-import {Grid,Button,TextField,Checkbox} from "@mui/material"
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import {TextField,Checkbox} from "@mui/material"
+import DeleteIcon from '@mui/icons-material/Delete';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import ContextRouter from "../contextAPI/ContextRouter"
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import RunQuery from "./RunQuery"
 import {fetchResponse} from "../BackendServices/FetchServices"
+import { useContext } from 'react';
+import "../CSS/ct.css"
 
 export default function CreateTable(props) {
     const [getTableName,setTableName]=useState("")
     const [getAdditional,setAdditional]=useState("")
     const [getColumns,setColumns]=useState({column:[]})
+    const context=useContext(ContextRouter)
     const handleAddColumn=()=>{
         let obj={columnName:"",dataType:"",isPrimary:false,isNotNull:false,isUnique:false,isAuto:false,isDefault:false,defaultValue:""}
         let arr=getColumns['column']
@@ -41,6 +38,7 @@ export default function CreateTable(props) {
             }
             else{
                 ourObj['isDefault']=false 
+                ourObj['defaultValue']=""
             }
         }
         else{
@@ -51,9 +49,10 @@ export default function CreateTable(props) {
     }
     const handleCreateTable=async()=>{
         if(getTableName===""){
-            alert("Enter Table Name")
+            context.setAlert({status:true,msg:"Enter Table Name",color:"red"})
         }
         else{
+            context.setLoader(true)
             let tableData={}
             let arr=getColumns['column']
             for(let index in arr){
@@ -63,22 +62,22 @@ export default function CreateTable(props) {
                 }
             }
             if(Object.keys(tableData).length===0){
-                alert("Add Some Column or set it's name")
+                context.setAlert({status:true,msg:"Enter Some Column",color:"red"})
             }
             else{
                 let additional=getAdditional===""?undefined:getAdditional
-                let body={dbname:localStorage.getItem("dbname"),tablename:getTableName,tableData,additional}
+                let body={dbname:context.getDatabase,tablename:getTableName,tableData,additional}
                 let res=await fetchResponse("/createtable",body)
-                if(res[0]){
-                    alert("Table Create")
-                    props.fetchTable()
-                    props.setComponent(<RunQuery/>)
+                if(res.status){
+                    context.setAlert({status:true,msg:"Table Created",color:"green"})
+                    context.fetchTable()
                 }
                 else{
-                    alert(res[1])
+                    context.setAlert({status:true,msg:res.err,color:"red"})
                 }
 
             }
+            context.setLoader(false)
         }
     }
     const handleDelete=(index)=>{
@@ -90,87 +89,107 @@ export default function CreateTable(props) {
     }
     function DbTable() {
         return (
-          <>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                <TableCell align="left">Action</TableCell>
-                <TableCell align="left">Column Name</TableCell>
-                <TableCell align="left">Data Type</TableCell>
-                <TableCell align="left">Primary Key</TableCell>
-                <TableCell align="left">Unique</TableCell>
-                <TableCell align="left">Not Null</TableCell>
-                <TableCell align="left">Auto Increment</TableCell>
-                <TableCell align="left">Default</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {
-                    getColumns['column'].map((item,index)=>{
-                        return(
-                          <TableRow key={index}>
-                              <TableCell style={{cursor:"pointer"}} align="left" onClick={()=>handleDelete(index)}>Delete</TableCell>
-                                <TableCell align="left"><TextField value={item.columnName} variant="outlined" label="Column Name" onChange={(e)=>{handleChange(e,"columnName",index)}}/></TableCell>
-                                <TableCell align="left">
-                                <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Data Type</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-            value={item.dataType}
-          label="Data Type"
-          onChange={(e)=>{handleChange(e,"dataType",index)}}
-        >
-          <MenuItem value={"integer"}>Integer</MenuItem>
-          <MenuItem value={"text"}>Text</MenuItem>
-          <MenuItem value={"real"}>Real</MenuItem>
-          <MenuItem value={"boolean"}>Boolean</MenuItem>
-        </Select>
-      </FormControl>
-                                    </TableCell>
-                                <TableCell align="left"><Checkbox checked={item.isPrimary} onChange={(e)=>{handleChange(e,"isPrimary",index)}} size="large" /></TableCell>
-                                <TableCell align="left"><Checkbox checked={item.isUnique} onChange={(e)=>{handleChange(e,"isUnique",index)}}  size="large" /></TableCell>
-                                <TableCell align="left"><Checkbox checked={item.isNotNull} onChange={(e)=>{handleChange(e,"isNotNull",index)}}  size="large" /></TableCell>
-                                <TableCell align="left"><Checkbox checked={item.isAuto} onChange={(e)=>{handleChange(e,"isAuto",index)}}  size="large" /></TableCell>
-                                <TableCell align="left"><TextField onChange={(e)=>{handleChange(e,"defaultValue",index)}} value={item.defaultValue} variant="outlined" label="Default Value"/></TableCell>
-                          </TableRow>  
-                        )
-                    })
-                }
-              </TableBody>
-            </Table>
-          </TableContainer>
-       </>
+                <div className='table-cell-main'>
+                    <div className='table-cell-sub'>
+                            <table className='table-main'>
+                                <thead className='table-head'>
+                                    <tr className='main-row'>
+                                        <th >
+                                            Action
+                                        </th>
+                                        <th className='text-btn'>
+                                            Column Name
+                                        </th>
+                                        <th className='text-btn'>
+                                            Data Type
+                                        </th>
+                                        <th className='text-btn'>
+                                            Primary Key
+                                        </th>
+                                        <th className='text-btn'>
+                                            Not Null
+                                        </th>
+                                        <th className='text-btn'>
+                                            Auto Increment
+                                        </th>
+                                        <th className='text-btn'>
+                                            Unqiue
+                                        </th>
+                                        <th className='text-btn'>
+                                            Default Value
+                                        </th>
+                                    </tr>
+                                </thead>
+                                    {
+                                        getColumns['column'].map((item,index)=>{
+                                            return(
+                                                <tr key={index} className="table-rows">
+                                                    <th onClick={()=>handleDelete(index)} className="action-btn">
+                                                        <DeleteIcon/>
+                                                    </th>
+                                                    <th className='text-btn'>
+                                                    <TextField value={item.columnName} variant="standard" label="Column Name" onChange={(e)=>{handleChange(e,"columnName",index)}}/>
+                                                    </th>
+                                                    <th className='text-btn'>
+                                                        <FormControl fullWidth>
+                                                            <InputLabel variant='standard' id="demo-simple-select-label"></InputLabel>
+                                                            <Select
+                                                              labelId="demo-simple-select-label"
+                                                              id="demo-simple-select"
+                                                              variant='standard'
+                                                                value={item.dataType}
+                                                              label="Data Type"
+                                                              onChange={(e)=>{handleChange(e,"dataType",index)}}
+                                                            >
+                                                              <MenuItem value={"integer"}>Integer</MenuItem>
+                                                              <MenuItem value={"text"}>Text</MenuItem>
+                                                              <MenuItem value={"real"}>Real</MenuItem>
+                                                              <MenuItem value={"boolean"}>Boolean</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </th>
+                                                    <th align="left"><Checkbox checked={item.isPrimary} onChange={(e)=>{handleChange(e,"isPrimary",index)}} size="large" /></th>
+                                                    <th align="left"><Checkbox checked={item.isUnique} onChange={(e)=>{handleChange(e,"isUnique",index)}}  size="large" /></th>
+                                                    <th align="left"><Checkbox checked={item.isNotNull} onChange={(e)=>{handleChange(e,"isNotNull",index)}}  size="large" /></th>
+                                                    <th align="left"><Checkbox checked={item.isAuto} onChange={(e)=>{handleChange(e,"isAuto",index)}}  size="large" /></th>
+                                                    <th  className='text-btn'align="left"><TextField onChange={(e)=>{handleChange(e,"defaultValue",index)}} value={item.defaultValue} variant="standard" label="Default Value"/></th>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                
+                    </table>
+                    </div>
+                </div>
             );
       }
     return (
-    <div style={{width:"100%"}}>
-        <Grid containor style={{width:"100%"}}>
-            <Grid item xs={12} style={{margin:10,fontSize:30,fontWeight:500,textAlign:"center"}}>
-                Create Table
-            </Grid>
-            <Grid item xs={12} style={{width:"98%",display:"flex",margin:10}}>
-                <Grid item xs={12} style={{marginInline:20,width:"50%"}}>
-                    <TextField onChange={(e)=>setTableName(e.currentTarget.value)} value={getTableName} fullWidth variant='outlined' label="Table Name"/>
-                </Grid>
-                <Grid item xs={12} style={{width:"50%"}}>
-                    <Button style={{fontSize:18,padding:10,marginInline:30}} onClick={handleAddColumn} variant="outlined" color="primary">Add Column</Button>
-                </Grid>
-            </Grid>
-            <Grid item xs={12} style={{width:"98%",display:"flex",margin:10}}>
-                <Grid item xs={12} style={{marginInline:20,width:"50%"}}>
-                    <TextField onChange={(e)=>setAdditional(e.currentTarget.value)} value={getAdditional} fullWidth variant='outlined' label="Additional"/>
-                </Grid>
-                <Grid item xs={12} style={{width:"50%"}}>
-                    <Button style={{fontSize:18,padding:10,marginInline:30}} onClick={handleCreateTable} variant="outlined" color="primary">Create Table</Button>
-                </Grid>
-            </Grid>
-            <Grid item xs={12} style={{marginBlock:20}}>
-                {DbTable()}
-            </Grid>
-        </Grid>
-
+    <div className='create-table-main-div'>
+            <div className='ct-sub-div'>
+                <div className='heading'>
+                    Create Table
+                </div>
+                <div className='ct-tablename'>
+                    <div className='text-area'>
+                    <TextField fullWidth onChange={(e)=>setTableName(e.currentTarget.value)} value={getTableName} variant='outlined' label="Table Name"/>
+                    </div>
+                    <div className='ct-addcolumn'>
+                        <button  onClick={handleAddColumn}  >Add Column</button>
+                    </div>
+                </div>
+                <div className='ct-tablename'>
+                    <div className='text-area'>
+                        <TextField onChange={(e)=>setAdditional(e.currentTarget.value)} multiline rows={2} value={getAdditional} fullWidth variant='outlined' label="Additional Query"/>
+                    </div>
+                    <div className='ct-addcolumn'>
+                        <button onClick={handleCreateTable}>Create Table</button>
+                    </div>
+                </div>
+                <div className='ct-main-window'>
+                    {DbTable()}
+                </div>
+                
+            </div>
     </div>
   )
 }

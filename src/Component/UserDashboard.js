@@ -1,175 +1,148 @@
-import * as React from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import MainListItems from './UserListItem';
-import {useHistory} from "react-router-dom"
-import Profile from "./Profile"
-import { fetchResponse } from '../BackendServices/FetchServices';
-
-const drawerWidth = 240;
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
-      }),
-    },
-  }),
-);
-
-const mdTheme = createTheme();
-
-function DashboardContent() {
-  const history=useHistory()
-  const [open, setOpen] = React.useState(true);
-  const [getContent,setContent]=React.useState(<></>)
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-  const [getUser,setUser]=React.useState({data:[]})
-  const fetchUser=async()=>{
-    let res=await fetchResponse("/profile",{});
-      if(res[0]){
-          setUser({data:[res[1].data]})
-          handleSetContent(<Profile user={res[1].data}/>)
-      }
-      else{
-        console.log(res)
-        // alert(res[1])
-        // history.replace({pathname:"/"})
-      }
-  }
-  const handleSetContent=(content)=>{
-    setContent(content)
-  }
-  React.useEffect(()=>{
-    fetchUser()
-  },[])
-  return (
-    getUser.data.length!==0 && <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Welcome Back {getUser.data[0].name}({getUser.data[0].emailid})
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            <MainListItems user={getUser.data[0]} handleSetContent={handleSetContent}/>
-            
-          </List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" >
-            {getContent}
-          </Container>
-        </Box>
-      </Box>
-    </ThemeProvider>
-  );
-}
+import { List,MenuItem,Select } from "@mui/material"
+import React from "react"
+import { useContext } from "react"
+import Tab from '@mui/material/Tab';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import TabPanel from '@mui/lab/TabPanel';
+import { useHistory } from "react-router-dom"
+import ContextRouter from "../contextAPI/ContextRouter"
+import MainListItems from "./MainListItems"
+import { useState } from "react";
+import RunQuery from "./RunQuery";
+import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
+import PrintIcon from '@mui/icons-material/Print';
+import BackupTableIcon from '@mui/icons-material/BackupTable';
+import DeleteIcon from '@mui/icons-material/Delete';
+import "../CSS/userdashboard.css"
+import DbManagment from "./DbManagment";
+import UploadDatabase from "./UploadDatabase";
+import CreateTable from "./CreateTable";
+import { deleteResponse } from "../BackendServices/FetchServices";
 
 export default function UserDashboard() {
+  const context=useContext(ContextRouter)
   const history=useHistory()
-  if(!localStorage.getItem('auth')){
-    localStorage.clear();
+  const [getContext,setContext]=useState(<></>)
+  const [getValue,setValue]=useState("0")
+  const handleRemoveDatabase=async()=>{
+    try{
+      let status=window.confirm("You Want To Drop "+context.getDatabase)
+      if(!status){
+        return;
+      }
+      let res=await deleteResponse("/deletedatabase",{dbname:context.getDatabase})
+      if(res.status){
+          let dbArr=(context.getDatabaseList)
+          dbArr=dbArr.filter((item)=>{
+              return item.databasename!=context.getDatabase;
+          })    
+          context.setDatabaseList(dbArr);
+          if(dbArr.length>0){
+            context.setDatabase(dbArr[0].databasename);
+          }
+          context.setAlert({status:true,msg:"Database Drop Successfully",color:"green"})
+          handleSetContent(<></>)
+      }
+      else{
+        context.setAlert({status:true,msg:res.err,color:"red"})
+      }
+    }
+    catch(e){
+      context.setAlert({status:true,msg:"Internal Error..",color:"yellow"})
+    }
+  }
+const actions = [
+  { icon: <FileCopyIcon />, name: 'Create Database' ,click:()=>{handleSetContent(<DbManagment key={1} heading={"Create Db"} isOpen={false}/>)}},
+  { icon: <CloudUploadIcon />, name: 'Upload Database',click:()=>{handleSetContent(<UploadDatabase/>)} },
+  { icon: <BackupTableIcon />, name: 'Create Table' ,click:()=>{handleSetContent(<CreateTable fetchTable={context.fetchTable} setComponent={handleSetContent}/>)}},
+  { icon: <DeleteIcon />, name: 'Drop Database',click:handleRemoveDatabase },
+  // { icon: <PrintIcon />, name: 'Download Database', },
+];
+  const handleChange=(e,val)=>{
+    setValue(val)
+  }
+  const handleChangeVal=(val)=>{
+      context.setDatabase(val.target.value)
+  }
+  const handleSetContent=(component)=>{
+      setContext(component);
+      setValue("1")
+  }
+  if(!localStorage.getItem("auth")){
     history.replace({pathname:"/"})
   }
-  return (<DashboardContent />);
+  return(
+  <TabContext value={getValue}>
+    <div className='dashboard-main-div'>
+        <div className='dashboard-sub-div'>
+            <div className='dahsboard-top-bar'>
+              <div className='databases-list'>
+                <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={context.getDatabase}
+                label="Database"
+                style={{width:"70%",height:"80%"}}
+                onChange={handleChangeVal}
+                >
+                {context.getDatabaseList.map((item)=>{
+                  return <MenuItem value={item.databasename}>{item.databasename}</MenuItem>
+                })
+              }
+                </Select>
+              </div>
+              <div className="switch-options">
+                <TabList  onChange={handleChange}>
+                  <Tab label="Execute Query" value="0" />
+                  <Tab label="Data" value="1" />
+                </TabList>
+              </div>
+              <div className="add-new" onClick={()=>{handleSetContent(<DbManagment key={1} heading={"Create Db"} isOpen={false}/>)}}>
+                    Create New Database
+              </div>
+              <div className="add-new" onClick={()=>{handleSetContent(<UploadDatabase/>)}}>
+                    Upload Database
+              </div>
+            </div>
+            <div className='dashboard-bottom-bar'>
+                <div className='dashboard-left-window'>
+                    <List>
+                      <MainListItems handleSetContent={handleSetContent}/>
+                    </List>
+                </div>
+                <div className='dashboard-right-window'>
+                        <TabPanel value="0">
+                              <RunQuery/>
+                        </TabPanel>
+                        <TabPanel value="1">
+                              {getContext}
+                        </TabPanel>
+                </div>
+                <div>
+                <SpeedDial
+                    ariaLabel="SpeedDial basic example"
+                    sx={{ position:"absolute",bottom:16,right:16 }}
+                    icon={<SpeedDialIcon />}
+
+                  >
+                    {actions.map((action) => (
+                      <SpeedDialAction
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
+                        onClick={action.click}
+                      />
+                    ))}
+                  </SpeedDial>
+                </div>
+            </div>
+        </div>
+    </div>
+  </TabContext>
+  )
 }

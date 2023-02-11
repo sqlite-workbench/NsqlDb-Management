@@ -7,64 +7,42 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import StorageIcon from '@mui/icons-material/Storage';
-import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 import TableViewIcon from '@mui/icons-material/TableView';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import {Server_Url,fetchResponse,deleteResponse} from "../BackendServices/FetchServices"
-import LogoutIcon from '@mui/icons-material/Logout';
-import {useHistory} from "react-router-dom"
-import RunQuery from "./RunQuery"
+import DeleteIcon from '@mui/icons-material/Delete';
+import {useHistory} from "react-router-dom";
+import ApiIcon from '@mui/icons-material/Api';
 import TableData from './TableData';
 import CreateTable from './CreateTable';
+import { useContext } from 'react';
+import ContextRouter from '../contextAPI/ContextRouter';
 export default function MainListItems(props){
   const history=useHistory()
+  const context=useContext(ContextRouter)
   const [getTable,setTable]=useState({tablesName:[]})
   const [open, setOpen] = useState(false);
   const handleSetContent=props.handleSetContent
-  const fetchTable=async()=>{
-      let body={dbname:localStorage.getItem("dbname")}
-      let res=await fetchResponse("/table",body)
-      if(res[0]){
-        setTable({tablesName:res[1].data})
-      }
-  }
-  const handleRemoveDatabase=async()=>{
-        let res=await deleteResponse("/deletedatabase",{dbname:localStorage.getItem("dbname")})
-        if(res[0]){
-          localStorage.removeItem("dbname")
-          history.replace({pathname:"/"})
-        }
-        else{
-          alert(res[1])
-        }
-  }
+
+  
 
   const handleShowTable=(table)=>{
-    handleSetContent(<TableData handleSetContent={handleSetContent} fetchTable={fetchTable} tablename={table.name}/>)
+    handleSetContent(<TableData handleSetContent={handleSetContent} fetchTable={context.fetchTable} tablename={table.name}/>)
   }
-  useEffect(()=>{
-      fetchTable()
-  },[localStorage.getItem("dbname")])
   const handleClick = () => {
     setOpen(!open);
   };
   
  return (
-  <React.Fragment>
-    <ListItemButton onClick={()=>{fetchTable()}}>
+  <div style={{overflow:"auto"}}>
+    <ListItemButton>
       <ListItemIcon>
         <StorageIcon />
       </ListItemIcon>
-      <ListItemText primary={localStorage.getItem("dbname")} />
+      <ListItemText primary={context.getDatabase} />
     </ListItemButton>
-    <ListItemButton onClick={()=>{handleSetContent(<RunQuery/>)}} >
-      <ListItemIcon>
-        <KeyboardCommandKeyIcon /> 
-      </ListItemIcon>
-      <ListItemText primary="Run Query" />
-    </ListItemButton>
-    <ListItemButton onClick={handleClick}>
+    <ListItemButton onClick={handleClick}  >
       <ListItemIcon> 
         <TableViewIcon />
       </ListItemIcon>
@@ -73,7 +51,7 @@ export default function MainListItems(props){
     </ListItemButton>
     <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {getTable['tablesName'].map((item)=>{
+          {context.getTableList.map((item)=>{
             return(
               <ListItemButton sx={{ pl: 4 }} onClick={()=>handleShowTable(item)}>
               <ListItemIcon> 
@@ -86,33 +64,38 @@ export default function MainListItems(props){
 }
         </List>
       </Collapse>
-    <ListItemButton onClick={()=>{handleSetContent(<CreateTable fetchTable={fetchTable} setComponent={handleSetContent}/>)}}>
+    <ListItemButton onClick={()=>{handleSetContent(<CreateTable fetchTable={context.fetchTable} setComponent={handleSetContent}/>)}}>
       <ListItemIcon>
         <BackupTableIcon />
       </ListItemIcon>
       <ListItemText primary="Create Table" />
     </ListItemButton>
-    <ListItemButton onClick={()=>{handleRemoveDatabase()}}>
+    <ListItemButton onClick={()=>{props.handleRemoveDatabase()}}>
       <ListItemIcon>
-        <BackupTableIcon />
+        <DeleteIcon/>
       </ListItemIcon>
       <ListItemText primary="Drop Database" />
     </ListItemButton>
-      <a target="_blank" style={{textDecoration:"none",color:"black"}} rel="noreferrer" download={true} href={`${Server_Url}/download/${localStorage.getItem("dbname")}.db/?dbname=${localStorage.getItem("dbname")}&auth=${localStorage.getItem('auth')}`}>
+      <a target="_blank" style={{textDecoration:"none",color:"black"}} rel="noreferrer" download={true} href={`${Server_Url}/download/${context.getDatabase}.db/?dbname=${context.getDatabase}&auth=${localStorage.getItem('auth')}`}>
     <ListItemButton>
-
       <ListItemIcon>
         <CloudDownloadIcon />
       </ListItemIcon>
-      <ListItemText primary="Download Database" onClick={()=>{window.history.location.href=`${Server_Url}/download/${localStorage.getItem("dbname")}.db`}} />
+      <ListItemText primary="Download Database" onClick={()=>{window.history.location.href=`${Server_Url}/download/${context.getDatabase}.db`}} />
     </ListItemButton>
       </a>
-      <ListItemButton onClick={()=>{localStorage.removeItem("dbname");history.replace({pathname:"/"})}}>
+      <ListItemButton >
       <ListItemIcon>
-        <LogoutIcon />
+        <ApiIcon/>
       </ListItemIcon>
-      <ListItemText primary="Close Database" />
+      <ListItemText primary="Database API's" />
     </ListItemButton>
-  </React.Fragment>
+      <ListItemButton >
+      <ListItemIcon>
+        <ApiIcon/>
+      </ListItemIcon>
+      <ListItemText primary="Access Control" />
+    </ListItemButton>
+  </div>
 );
  }

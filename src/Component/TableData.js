@@ -1,29 +1,30 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect, useContext} from 'react'
 import {deleteResponse, fetchResponse} from "../BackendServices/FetchServices"
 import {Button,Grid} from "@mui/material"
 import DbTable from './DbTable'
 import RunQuery from './RunQuery'
 import DbDialog from './DbDialog'
+import ContextRouter from '../contextAPI/ContextRouter'
 export default function TableData(props) {
+    const context=useContext(ContextRouter)
     const [getData,setData]=useState({data:[]})
     const [getColumn,setColumn]=useState({column:[]})
     const [getOpen,setOpen]=useState(false)
     const getDataUrl=async()=>{
-        let body={dbname:localStorage.getItem("dbname"),tablename:props.tablename}
+        let body={dbname:context.getDatabase,tablename:props.tablename}
         let res=await fetchResponse("/getalldata",body)
-        if(res[0]){
-            
-            setData({data:res[1].data})
+        if(res.status){
+            setData({data:res.data})
         }
         else{
-            alert(res[1])
+            alert(res.err)
         }
     }
     const getColumnUrl=async()=>{
-        let body={dbname:localStorage.getItem("dbname"),tablename:props.tablename}
+        let body={dbname:context.getDatabase,tablename:props.tablename}
         let res=await fetchResponse("/tableinfo",body)
-        if(res[0]){
-            let data=res[1].data
+        if(res.status){
+            let data=res.data
             setColumn({column:data})
             // let outPut=[]
             // for(let key of data){
@@ -32,7 +33,7 @@ export default function TableData(props) {
             // setColumn({column:outPut})
         }
         else{
-            alert(res[1])
+            alert(res.err)
         }
     }
     useEffect(()=>{
@@ -43,28 +44,34 @@ export default function TableData(props) {
     const handleDropTable=async()=>{
         let user_want=window.confirm(`Are You Sure You Want to Drop '${props.tablename}' Table`)
     if(user_want){
-      let body={"dbname":localStorage.getItem("dbname"),"tablename":props.tablename}
+        context.setLoader(true)
+      let body={"dbname":context.getDatabase,"tablename":props.tablename}
     let res=await deleteResponse("/droptable",body)
-    if(res[0]){
-        alert("Table Deleted")
-        props.fetchTable()
-        props.handleSetContent(<RunQuery/>)
+    if(res.status){
+        context.setAlert({status:true,msg:"Table Drop Successfully","color":"green"})
+        context.fetchTable()
       }
     else{
-      alert(JSON.stringify(res[1]))
+        context.setAlert({status:true,msg:res.err,"color":"red"})
     }
+    context.setLoader(false)
   }
     }
     
   return (
     <div style={{display:"flex",flexDirection:"column"}}>
         <Grid containor>
-            <Grid item xs={12} style={{fontSize:30,fontWeight:"bold",textDecoration:"lowercase",textAlign:"center",margin:20}}>
+            <Grid item xs={12} style={{fontSize:30,fontWeight:"350",textDecoration:"lowercase",textAlign:"center",margin:20,textTransform:"uppercase"}}>
         {props.tablename}
             </Grid>
-            <Grid xs={12} style={{margin:20}}>
-        <Button style={{margin:20}} variant="outlined" onClick={handleDropTable} color="secondary">Drop Table</Button>
-        <Button style={{margin:20}} variant="outlined" onClick={()=>setOpen(true)} color="primary">Add Data</Button>
+            <Grid xs={6} style={{margin:20,display:"flex"}}>
+                <div className='ct-addcolumn' style={{width:"15%"}}>
+                    <button  onClick={handleDropTable} >Drop Table</button>
+                </div>
+                <div style={{width:"15%"}} className='ct-addcolumn'>
+
+                    <button  onClick={()=>setOpen(true)} >Add Data</button>
+                </div>
             </Grid>
             <Grid xs={12} style={{marginBottom:20}}>
 

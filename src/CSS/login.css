@@ -1,0 +1,86 @@
+.login-main{
+    width: 100%;
+    display: flex;
+}
+.login-sub-main{
+    margin-top: 9vh;
+    display: flex;
+    width: 100%;
+    height: 90.5vh;
+}
+.login-sub-1{
+    margin-top: 20px;
+    width: 30%;
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    font-style: italic;
+}
+.login-sub-2{
+    width: 70%;
+}
+.login-sub-2 img{
+    width: 100%;
+    height: 100%;
+}
+.login-logo{
+    width: 100%;
+    font-size: 2em;
+    display: flex;
+    color: rgb(22, 22, 92);
+    justify-content: flex-start;
+    align-items: center;
+}
+.login-logo img{
+    width: 15%;
+    height: 100%;
+}
+.login-heading{
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 2.5em;
+    color: rgb(11, 11, 59);
+}
+
+.emailid{
+    width: 80%;
+    margin-block:30px ;
+    margin-left: 10px;
+}
+.password{
+    width: 80%;
+    margin-left: 10px;
+    margin-bottom:30px ;
+}
+
+.login-btn{
+    width: 100%;
+}
+.login-btn button{
+    font-size: 18px;
+    font-weight: 350;
+    font-style: italic;
+    padding: 10px;
+    margin-left: 20px;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    background-color: skyblue;
+    border-radius: 10px;
+    color: white;
+}
+
+.login-labels{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    margin-top: 20px;
+}
+.forgot-password{
+    cursor: pointer;
+    color: blue;
+}
+.signup-label span{
+    color: blue;
+    cursor: pointer;
+}
