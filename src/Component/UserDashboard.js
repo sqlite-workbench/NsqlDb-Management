@@ -23,6 +23,8 @@ import DbManagment from "./DbManagment";
 import UploadDatabase from "./UploadDatabase";
 import CreateTable from "./CreateTable";
 import { deleteResponse } from "../BackendServices/FetchServices";
+import { useEffect } from "react";
+import TableData from "./TableData";
 
 export default function UserDashboard() {
   const context=useContext(ContextRouter)
@@ -31,7 +33,7 @@ export default function UserDashboard() {
   const [getValue,setValue]=useState("0")
   const handleRemoveDatabase=async()=>{
     try{
-      let status=window.confirm("You Want To Drop "+context.getDatabase)
+      let status=window.confirm("You Want To Drop "+context.getDatabase+" Database")
       if(!status){
         return;
       }
@@ -46,7 +48,7 @@ export default function UserDashboard() {
             context.setDatabase(dbArr[0].databasename);
           }
           context.setAlert({status:true,msg:"Database Drop Successfully",color:"green"})
-          handleSetContent(<></>)
+          setDefaultComponent()
       }
       else{
         context.setAlert({status:true,msg:res.err,color:"red"})
@@ -76,6 +78,21 @@ const actions = [
   if(!localStorage.getItem("auth")){
     history.replace({pathname:"/"})
   }
+  const setDefaultComponent=()=>{
+    if(context.getDatabaseList.length==0){
+        handleSetContent(<DbManagment key={1} heading={"Create Db"} isOpen={false}/>)
+    }  
+    if(context.getTableList.length==0){
+      handleSetContent(<CreateTable fetchTable={context.fetchTable} setComponent={handleSetContent}/>)
+    }
+    else{
+      context.setTable(context.getTableList[0].name)
+      handleSetContent(<TableData handleSetContent={handleSetContent} fetchTable={context.fetchTable}/>)
+    }
+  }
+  useEffect(()=>{
+      setDefaultComponent()
+  },[context.getTableList])
   return(
   <TabContext value={getValue}>
     <div className='dashboard-main-div'>
@@ -112,12 +129,12 @@ const actions = [
             <div className='dashboard-bottom-bar'>
                 <div className='dashboard-left-window'>
                     <List>
-                      <MainListItems handleSetContent={handleSetContent}/>
+                      <MainListItems handleSetContent={handleSetContent} handleRemoveDatabase={handleRemoveDatabase}/>
                     </List>
                 </div>
                 <div className='dashboard-right-window'>
                         <TabPanel value="0">
-                              <RunQuery/>
+                              <RunQuery setValue={setValue} setComponent={handleSetContent}/>
                         </TabPanel>
                         <TabPanel value="1">
                               {getContext}

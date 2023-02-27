@@ -18,25 +18,33 @@ import TableData from './TableData';
 import CreateTable from './CreateTable';
 import { useContext } from 'react';
 import ContextRouter from '../contextAPI/ContextRouter';
+import { Logout } from '@mui/icons-material';
 export default function MainListItems(props){
-  const history=useHistory()
   const context=useContext(ContextRouter)
-  const [getTable,setTable]=useState({tablesName:[]})
   const [open, setOpen] = useState(false);
   const handleSetContent=props.handleSetContent
 
   
 
   const handleShowTable=(table)=>{
-    handleSetContent(<TableData handleSetContent={handleSetContent} fetchTable={context.fetchTable} tablename={table.name}/>)
+    context.setTable(table.name)
+    handleSetContent(<TableData handleSetContent={handleSetContent} fetchTable={context.fetchTable}/>)
   }
   const handleClick = () => {
     setOpen(!open);
   };
+  const handleReload=()=>{
+      context.fetchDatabase()
+      context.fetchTable()
+  }
+  const handleLogout=()=>{
+    localStorage.removeItem("auth");
+    context.setIsFetch(!context.isFetch);
+}
   
  return (
   <div style={{overflow:"auto"}}>
-    <ListItemButton>
+    <ListItemButton onClick={handleReload}>
       <ListItemIcon>
         <StorageIcon />
       </ListItemIcon>
@@ -50,7 +58,7 @@ export default function MainListItems(props){
       {open ? <ExpandLess /> : <ExpandMore />}
     </ListItemButton>
     <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
+        <List component="div" disablePadding style={{height:"20vh",overflow:"auto"}}>
           {context.getTableList.map((item)=>{
             return(
               <ListItemButton sx={{ pl: 4 }} onClick={()=>handleShowTable(item)}>
@@ -84,18 +92,18 @@ export default function MainListItems(props){
       <ListItemText primary="Download Database" onClick={()=>{window.history.location.href=`${Server_Url}/download/${context.getDatabase}.db`}} />
     </ListItemButton>
       </a>
-      <ListItemButton >
+      <ListItemButton onClick={handleLogout}>
       <ListItemIcon>
-        <ApiIcon/>
+        <Logout/>
       </ListItemIcon>
-      <ListItemText primary="Database API's" />
+      <ListItemText primary="Logout" />
     </ListItemButton>
-      <ListItemButton >
+      {/* <ListItemButton >
       <ListItemIcon>
         <ApiIcon/>
       </ListItemIcon>
       <ListItemText primary="Access Control" />
-    </ListItemButton>
+    </ListItemButton> */}
   </div>
 );
  }

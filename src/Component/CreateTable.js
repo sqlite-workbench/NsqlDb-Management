@@ -68,7 +68,9 @@ export default function CreateTable(props) {
                 let additional=getAdditional===""?undefined:getAdditional
                 let body={dbname:context.getDatabase,tablename:getTableName,tableData,additional}
                 let res=await fetchResponse("/createtable",body)
+                context.setLoader(false)
                 if(res.status){
+
                     context.setAlert({status:true,msg:"Table Created",color:"green"})
                     context.fetchTable()
                 }

@@ -13,6 +13,7 @@ export default function ContextMain(props) {
     const [getTableList,setTableList]=useState([])
     const [getAlert,setAlert]=useState({status:false,msg:"Server Error.....",color:"red"})
     const [getUser,setUser]=useState({"name":"",emailid:"",contactnumber:"",apikey:""})
+    
     const ActiveLoader=()=>{
         document.body.style.overflow="none"
         setLoader(true);
@@ -111,7 +112,7 @@ export default function ContextMain(props) {
             fetchTable()
     },[getDatabase])
   return (
-    <ContextRouter.Provider value={{getTable,setTable,getTableList,setTableList,getDatabaseList,setDatabaseList,getDatabase,setDatabase,runLoader,setIsFetch,isFetch,fetchUser,getUser,getProgress,setProgress,getAlert,setAlert,getLoader,ActiveLoader,DeactiveLoader,setLoader}}>
+    <ContextRouter.Provider value={{fetchTable,getTable,setTable,getTableList,setTableList,getDatabaseList,setDatabaseList,getDatabase,setDatabase,runLoader,setIsFetch,isFetch,fetchUser,getUser,getProgress,setProgress,getAlert,setAlert,getLoader,ActiveLoader,DeactiveLoader,setLoader,fetchDatabase}}>
             {props.children}
     </ContextRouter.Provider>
   )

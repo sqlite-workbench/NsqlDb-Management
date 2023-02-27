@@ -2,11 +2,13 @@ import React,{useContext, useState} from 'react'
 import {fetchResponse} from "../BackendServices/FetchServices"
 import {Grid,TextField,Button} from "@mui/material"
 import ContextRouter from "../contextAPI/ContextRouter"
-export default function RunQuery() {
+import ShowResponse from './ShowResponse'
+export default function RunQuery(props) {
     const context=useContext(ContextRouter)
     const [getQuery,setQuery]=useState("")
     const [getResponse,setResponse]=useState("")
     const handleClick=async()=>{
+        setResponse("")
         context.setLoader(true)
         try{
             if(getQuery!==""){
@@ -20,10 +22,14 @@ export default function RunQuery() {
                 let res=await fetchResponse("/run",body)
                 
                 if(res.status)
-                    res=getResponse+JSON.stringify(res.data)+"\n"
+                    res=res.data
                     else
-                    res=getResponse+JSON.stringify(res.err)+"\n"
+                    res=res.err
+                if(typeof(res)=="string" || res.length==0){
+                    res=JSON.stringify(res)
+                }
                 setResponse(res);
+                context.setAlert({status:true,msg:"Query Execution Done",color:'green'})
                 }
             }
                 else{
@@ -32,14 +38,19 @@ export default function RunQuery() {
             
         }
         catch(e){
+            context.setAlert({status:true,msg:"Query Execution Done",color:'green'})
             setResponse(e.message)
         }
         context.setLoader(false)
     }
+    const handleShow=()=>{
+        props.setValue("1")
+        props.setComponent(<ShowResponse data={getResponse} tablename={getQuery}/>)
+    }
   return (
     <div>
         <Grid containor>
-            <Grid item xs={12} style={{margin:10,fontSize:30,fontWeight:"bold",textAlign:"center"}}>
+            <Grid item xs={12} className="heading" style={{marginBlock:20}}>
                 Run Query
             </Grid>
         <Grid item xs={12}>
@@ -48,17 +59,15 @@ export default function RunQuery() {
         <Grid xs={12} style={{display:"flex"}}>
 
         <Grid xs={6} style={{margin:10}} >
-            <Button fullWidth variant="outlined" onClick={handleClick} color="primary">Run Query</Button>
+            <Button fullWidth variant="outlined" onClick={handleClick} style={{color:"white",backgroundColor:"skyblue",borderRadius:15}}>Run Query</Button>
         </Grid>
         <Grid xs={6} fullWidth style={{margin:10}}>
-            <Button variant="outlined" onClick={()=>{setQuery("");setResponse("")}} color="primary">Clear</Button>
+            <Button variant="outlined" style={{color:"white",backgroundColor:"skyblue",borderRadius:15}} onClick={()=>{setQuery("");setResponse("")}} color="primary">Clear</Button>
         </Grid>
         </Grid>
-        {getResponse.length!==0?<><Grid item xs={12} style={{margin:10,fontSize:30,fontWeight:"bold",textAlign:"center"}}>
-            Response
-        </Grid>
-        <Grid item xs={12} style={{marginBottom:20}}>
-            <TextField disabled multiline rows={10} value={getResponse} variant="outlined" label="Response"  fullWidth/>
+        {getResponse.length!==0?<>
+        <Grid item xs={12} style={{marginBlock:20}}>
+            {typeof(getResponse)=="string" || getResponse.length==0?<TextField disabled multiline rows={6} value={(getResponse)} variant="outlined" label="Response"  fullWidth/>:handleShow()}
         </Grid></>:<></>}
         </Grid>
     </div>
