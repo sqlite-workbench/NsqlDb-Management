@@ -58,7 +58,7 @@ export default function MainListItems(props){
       {open ? <ExpandLess /> : <ExpandMore />}
     </ListItemButton>
     <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding style={{height:"20vh",overflow:"auto"}}>
+        <List component="div" disablePadding style={{maxHeight:context.getTableList.length!==0?"20vh":"0vh",overflow:"auto"}}>
           {context.getTableList.map((item)=>{
             return(
               <ListItemButton sx={{ pl: 4 }} onClick={()=>handleShowTable(item)}>
