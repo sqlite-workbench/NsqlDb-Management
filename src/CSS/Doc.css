@@ -1,0 +1,38 @@
+.doc-main{
+    width: 95%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.doc-sub{
+    width: 50%;
+    margin-top: 50px;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.doc-items{
+    width: 95%;
+    padding: 10px;
+    margin: 10px;
+}
+
+.doc-api-key{
+    margin-block: 15px;
+}
+
+.doc-example{
+    width: 95%;
+    padding: 10px;
+    margin: 10px;
+}
+.doc-example input:disabled{
+    cursor: pointer;
+}
+.doc-api-key input:disabled{
+    color: black;
+    cursor: pointer;
+}

@@ -1,47 +1,39 @@
 import React from 'react'
-import {Grid} from '@mui/material'
+import {TextField} from '@mui/material'
+import "../CSS/Doc.css"
+import ContextRouter from "../contextAPI/ContextRouter"
+import { useContext } from 'react'
 export default function Documentation() {
+  const context=useContext(ContextRouter)
+  const handleClick=(name,value)=>{
+    navigator.clipboard.writeText(value);
+    context.setAlert({status:true,msg:`${name} Copied Successfully`,color:"green"})
+  }
   return (
-    <div style={{padding:10,marginBlock:30,display:"flex",width:"95%",justifyContent:"center"}}>
-        <Grid containor style={{border:"1px solid black",padding:20,width:"50%",backgroundColor:"#e5f1cc",boxShadow:"12px 12px 12px gray"}}>
-            <Grid item xs={12} style={{margin:10,fontSize:25,fontWeight:600,textAlign:"center"}}>
-            Documentation
-            </Grid>
-            <Grid item xs={12} style={{margin:10,fontSize:20}}>
-                Api https://nsqldb.glitch.me
-            </Grid>
-            <Grid item xs={12} style={{margin:10,fontSize:20}}>
-                Method Post
-            </Grid>
-            <Grid item xs={12} style={{margin:10,fontSize:20}}>
-                Body:
-                   <ul>
-                 <li>
-                   dbname (Database Name)
-                 </li>
-                 <li>
-                   Query (sqlite query)
-                 </li>
-                   </ul>
-            </Grid>
-            <Grid item xs={12} style={{margin:10,fontSize:20}}>
-              Api Key:
-              Pass in headers or body any one
-              <ul>
-                <li>
-              headers:{"{apikey:key}"}
-                </li>
-                <li>
-              body:{"{apikey:key}"}
-                </li>
-              </ul>
-            </Grid>
-            <Grid item xs={12} style={{margin:10,fontSize:20}}>
-              Example:
-                  request.post("https://nsqldb.gltich.me/run",{"{dbname:'test',query:'select * from tem;'}"},{"{content-type:'application/json','apikey':'key'}"});
-            </Grid>
-            </Grid>
-
+    <div className='doc-main'>
+        <div className='doc-sub'>
+            <div className='heading'>
+                Documentation
+            </div>
+            <div className='doc-items'>
+                <div className='doc-api-key'>
+                  <TextField onClick={()=>{handleClick("API","https://nsqldb.glitch.me/run")}} disabled fullWidth variant='outlined' value={"https://nsqldb.glitch.me/run"} label="API"/>
+                </div>
+                <div className='doc-api-key'>
+                  <TextField onClick={()=>{handleClick("METHOD","POST")}} disabled fullWidth variant='outlined' value={"POST"} label="Method"/>
+                </div>
+                <div className='doc-api-key'>
+                  <TextField onClick={()=>{handleClick("REQUEST HEADER","{apikey:your_key,content-type:application/json}")}} disabled fullWidth variant='outlined' value={"{apikey:your_key,content-type:application/json}"} label="Request Header"/>
+                </div>
+                <div className='doc-api-key'>
+                  <TextField disabled onClick={()=>{handleClick("REQUEST BODY","{dbname:your_database_name,query:sqlite_query}")}} fullWidth variant='outlined' value={"{dbname:your_database_name,query:sqlite_query}"} label="Request Body"/>
+                </div>
+            </div>
+            <div className='doc-example'>
+                  <TextField onClick={()=>{handleClick("EXAMPLE","request.post(https://nsqldb.gltich.me/run,{{dbname:your_db_name,query:'select * from tem;'}},{{content-type:'application/json','apikey':your_apikey}});")}} disabled fullWidth multiline={true} variant='outlined' rows={3} value={" request.post(https://nsqldb.gltich.me/run,{{dbname:your_db_name,query:'select * from tem;'}},{{content-type:'application/json','apikey':your_apikey}});"} label="Example"/>
+            </div>
+        </div>
     </div>
+
   )
 }
