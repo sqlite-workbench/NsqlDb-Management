@@ -52,12 +52,12 @@ export default function Home() {
                             </ul>
                         </div>
                     </div>
-                    <div className='home-part-212'>
+                    <div className='home-part-212 side-img'>
                             <img src='why.png'/>
                     </div>
                 </div>
                 <div className='home-part-21'>
-                    <div className='home-part-211'>
+                    <div className='home-part-211 side-img'>
                     <img src='how.png'/>
                     </div>
                     <div className='home-part-212'>
