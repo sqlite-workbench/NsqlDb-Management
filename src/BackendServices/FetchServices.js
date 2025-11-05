@@ -1,6 +1,6 @@
 import axios from "axios"
-// let Server_Url="https://nsqldb.glitch.me"
-let Server_Url="http://localhost:5000"
+let Server_Url="https://nsqldb-backend.onrender.com"
+// let Server_Url="http://localhost:5000"
 const fetchResponse=async(url,body,config={headers:{"content-type":"application/json",auth:localStorage.getItem("auth")}},isString=true)=>{
     try{
         let data={
