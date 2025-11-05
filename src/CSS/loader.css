@@ -1,12 +1,246 @@
-.loader-main{
-    display: flex;
-    width: 100%;
-    text-align: center;
-    /* margin: auto; */
-    position: fixed;
-    justify-content: center;
-    align-items: center;
-    height: 90vh;
-    z-index: 10000;
-    
+/* Loader Component Styles */
+
+.loader-main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Loader Content */
+.loader-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Loader Icon Wrapper */
+.loader-icon-wrapper {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.loader-icon {
+  font-size: 3rem !important;
+  color: #667eea;
+  filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.5));
+  animation: iconRotate 3s linear infinite;
+}
+
+@keyframes iconRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Loader Text */
+.loader-text {
+  margin-top: 2rem;
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out 0.3s backwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loader-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.loader-subtitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Animated Dots */
+.loader-dots {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  animation: fadeInUp 0.6s ease-out 0.5s backwards;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.5);
+  animation: dotBounce 1.4s ease-in-out infinite;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotBounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-15px);
+    opacity: 0.7;
+  }
+}
+
+/* Ring Loader Customization */
+.loader-content > span {
+  filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.4));
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .loader-icon {
+    font-size: 2.5rem !important;
+  }
+  
+  .loader-title {
+    font-size: 1.5rem;
+  }
+  
+  .loader-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loader-icon {
+    font-size: 2rem !important;
+  }
+  
+  .loader-title {
+    font-size: 1.3rem;
+  }
+  
+  .loader-subtitle {
+    font-size: 0.85rem;
+    padding: 0 1rem;
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .loader-dots {
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+}
+
+/* Alternative Spinner Background */
+.loader-main::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+  animation: ripple 3s ease-out infinite;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .loader-main,
+  .loader-content,
+  .loader-icon-wrapper,
+  .loader-icon,
+  .loader-text,
+  .loader-dots,
+  .dot,
+  .loader-main::before {
+    animation: none !important;
+  }
+  
+  .loader-icon {
+    transform: none !important;
+  }
 }

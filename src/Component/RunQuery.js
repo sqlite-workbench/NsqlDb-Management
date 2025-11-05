@@ -3,6 +3,11 @@ import {fetchResponse} from "../BackendServices/FetchServices"
 import {Grid,TextField,Button} from "@mui/material"
 import ContextRouter from "../contextAPI/ContextRouter"
 import ShowResponse from './ShowResponse'
+import PlayArrowIcon from '@mui/icons-material/PlayArrow'
+import ClearIcon from '@mui/icons-material/Clear'
+import CodeIcon from '@mui/icons-material/Code'
+import '../CSS/runquery.css'
+
 export default function RunQuery(props) {
     const context=useContext(ContextRouter)
     const [getQuery,setQuery]=useState("")
@@ -48,28 +53,78 @@ export default function RunQuery(props) {
         props.setComponent(<ShowResponse data={getResponse} tablename={getQuery}/>)
     }
   return (
-    <div>
-        <Grid containor>
-            <Grid item xs={12} className="heading" style={{marginBlock:20}}>
-                Run Query
-            </Grid>
-        <Grid item xs={12}>
-            <TextField multiline rows={10} value={getQuery} onChange={(e)=>{setQuery(e.currentTarget.value);setResponse("")}} variant="outlined" label="Query"  fullWidth/>
-        </Grid>
-        <Grid xs={12} style={{display:"flex"}}>
+    <div className="run-query-container">
+        {/* Header Section */}
+        <div className="query-header">
+            <div className="header-icon-wrapper">
+                <CodeIcon className="header-icon" />
+                <h2 className="query-title">SQL Query Editor</h2>
+            </div>
+            <div className="query-badge">
+                {context.getDatabase}
+            </div>
+        </div>
 
-        <Grid xs={6} style={{margin:10}} >
-            <Button fullWidth variant="outlined" onClick={handleClick} style={{color:"white",backgroundColor:"skyblue",borderRadius:15}}>Run Query</Button>
-        </Grid>
-        <Grid xs={6} fullWidth style={{margin:10}}>
-            <Button variant="outlined" style={{color:"white",backgroundColor:"skyblue",borderRadius:15}} onClick={()=>{setQuery("");setResponse("")}} color="primary">Clear</Button>
-        </Grid>
-        </Grid>
-        {getResponse.length!==0?<>
-        <Grid item xs={12} style={{marginBlock:20}}>
-            {typeof(getResponse)=="string" || getResponse.length==0?<TextField disabled multiline rows={6} value={(getResponse)} variant="outlined" label="Response"  fullWidth/>:handleShow()}
-        </Grid></>:<></>}
-        </Grid>
+        {/* Query Input Section */}
+        <div className="query-editor-section">
+            <div className="editor-label">
+                <span className="label-icon">✏️</span>
+                <span>Write your SQL query</span>
+            </div>
+            <TextField 
+                multiline 
+                rows={10} 
+                value={getQuery} 
+                onChange={(e) => {setQuery(e.currentTarget.value);setResponse("")}} 
+                variant="outlined" 
+                label="SQL Query"  
+                fullWidth
+                className="query-input"
+                placeholder="SELECT * FROM table_name;"
+            />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="query-actions">
+            <button 
+                className="action-btn run-btn" 
+                onClick={handleClick}
+            >
+                <PlayArrowIcon className="btn-icon" />
+                <span>Run Query</span>
+            </button>
+            <button 
+                className="action-btn clear-btn" 
+                onClick={() => {setQuery("");setResponse("")}}
+            >
+                <ClearIcon className="btn-icon" />
+                <span>Clear</span>
+            </button>
+        </div>
+
+        {/* Response Section */}
+        {getResponse.length !== 0 && (
+            <div className="query-response-section">
+                <div className="response-label">
+                    <span className="label-icon">📊</span>
+                    <span>Query Result</span>
+                </div>
+                {typeof(getResponse) === "string" || getResponse.length === 0 ? (
+                    <TextField 
+                        disabled 
+                        multiline 
+                        rows={6} 
+                        value={(getResponse)} 
+                        variant="outlined" 
+                        label="Response"  
+                        fullWidth
+                        className="response-output"
+                    />
+                ) : (
+                    handleShow()
+                )}
+            </div>
+        )}
     </div>
   )
 }

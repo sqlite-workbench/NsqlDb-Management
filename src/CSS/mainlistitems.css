@@ -1,0 +1,395 @@
+/* Main List Items - Modern Design */
+
+.main-list-items {
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: 10px;
+}
+
+/* List Item Button Base Styles */
+.list-item-button {
+    border-radius: 12px !important;
+    margin-bottom: 8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    padding: 12px 16px !important;
+}
+
+/* Sweep Animation on Hover */
+.list-item-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+    transition: left 0.5s ease;
+    z-index: 0;
+}
+
+.list-item-button:hover::before {
+    left: 100%;
+}
+
+.list-item-button:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%) !important;
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+/* Database Header */
+.database-header {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%) !important;
+    border: 2px solid rgba(102, 126, 234, 0.2) !important;
+    margin-bottom: 16px !important;
+    font-weight: 600 !important;
+}
+
+.database-header:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%) !important;
+    border-color: rgba(102, 126, 234, 0.4) !important;
+}
+
+.database-header .list-item-text-primary {
+    font-weight: 700 !important;
+    color: #667eea !important;
+    font-size: 1.05em !important;
+}
+
+.refresh-icon {
+    color: #667eea !important;
+    animation: rotateOnHover 0.5s ease-in-out;
+    transition: all 0.3s ease !important;
+}
+
+.database-header:hover .refresh-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotateOnHover {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+}
+
+/* Tables Toggle */
+.tables-toggle {
+    background: rgba(102, 126, 234, 0.05) !important;
+    font-weight: 600 !important;
+}
+
+.tables-toggle:hover {
+    background: rgba(102, 126, 234, 0.1) !important;
+}
+
+.expand-icon {
+    transition: transform 0.3s ease !important;
+    color: #667eea !important;
+}
+
+.tables-toggle:hover .expand-icon {
+    transform: scale(1.2);
+}
+
+/* Nested List */
+.nested-list {
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 0 !important;
+    background: linear-gradient(180deg, rgba(102, 126, 234, 0.02) 0%, transparent 100%);
+    border-radius: 8px;
+    margin: 8px 0 16px 0;
+}
+
+.nested-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.nested-list::-webkit-scrollbar-track {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 10px;
+}
+
+.nested-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+.nested-list::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #7688f0 0%, #8659b0 100%);
+}
+
+/* Nested Items */
+.nested-item {
+    padding-left: 48px !important;
+    margin-bottom: 4px !important;
+}
+
+.nested-item:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%) !important;
+    padding-left: 52px !important;
+}
+
+.nested-item.Mui-selected {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.nested-item.Mui-selected .nested-icon,
+.nested-item.Mui-selected .nested-text {
+    color: white !important;
+}
+
+.nested-item.Mui-selected:hover {
+    background: linear-gradient(135deg, #7688f0 0%, #8659b0 100%) !important;
+}
+
+.nested-icon {
+    min-width: 36px !important;
+}
+
+.nested-text {
+    font-size: 0.9em !important;
+    font-weight: 500 !important;
+}
+
+/* Empty State */
+.empty-tables {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    gap: 10px;
+    color: #999;
+}
+
+.empty-icon {
+    font-size: 2.5em;
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.empty-text {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #999;
+}
+
+/* Action Items Section */
+.action-items {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 2px solid rgba(102, 126, 234, 0.1);
+}
+
+.action-item {
+    margin-bottom: 6px !important;
+}
+
+.action-item:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%) !important;
+}
+
+/* Danger Item (Delete) */
+.danger-item:hover {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(200, 35, 51, 0.1) 100%) !important;
+}
+
+.danger-item:hover .list-item-icon,
+.danger-item:hover .list-item-text-primary {
+    color: #dc3545 !important;
+}
+
+/* Logout Item */
+.logout-item {
+    background: rgba(255, 193, 7, 0.05) !important;
+    border: 1px solid rgba(255, 193, 7, 0.2) !important;
+}
+
+.logout-item:hover {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%) !important;
+    border-color: rgba(255, 193, 7, 0.4) !important;
+}
+
+.logout-item:hover .list-item-icon,
+.logout-item:hover .list-item-text-primary {
+    color: #ff9800 !important;
+}
+
+/* Download Link */
+.download-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.download-link .list-item-button:hover {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(25, 135, 84, 0.1) 100%) !important;
+}
+
+.download-link .list-item-button:hover .list-item-icon,
+.download-link .list-item-button:hover .list-item-text-primary {
+    color: #28a745 !important;
+}
+
+/* List Item Icon */
+.list-item-icon {
+    min-width: 40px !important;
+    color: #667eea !important;
+    transition: all 0.3s ease !important;
+}
+
+.list-item-button:hover .list-item-icon {
+    transform: scale(1.15) rotate(-5deg);
+}
+
+/* List Item Text */
+.list-item-text-primary {
+    font-weight: 500 !important;
+    font-size: 0.95em !important;
+    color: #333 !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Pulse Animation for Icons */
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.database-header .list-item-icon {
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+/* Smooth Collapse Animation */
+.MuiCollapse-root {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Active/Selected State Enhancement */
+.list-item-button.Mui-selected {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+.list-item-button.Mui-selected .list-item-icon,
+.list-item-button.Mui-selected .list-item-text-primary {
+    color: white !important;
+}
+
+.list-item-button.Mui-selected:hover {
+    background: linear-gradient(135deg, #7688f0 0%, #8659b0 100%) !important;
+    transform: translateX(8px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .list-item-button {
+        padding: 10px 12px !important;
+    }
+    
+    .list-item-text-primary {
+        font-size: 0.9em !important;
+    }
+    
+    .nested-list {
+        max-height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .list-item-button {
+        padding: 8px 10px !important;
+    }
+    
+    .list-item-icon {
+        min-width: 35px !important;
+    }
+    
+    .nested-item {
+        padding-left: 40px !important;
+    }
+}
+
+/* Hover Glow Effect */
+.list-item-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(102, 126, 234, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.list-item-button:active::after {
+    width: 200px;
+    height: 200px;
+}
+
+/* Ensure text and icons are above pseudo-elements */
+.list-item-icon,
+.list-item-text-primary,
+.refresh-icon,
+.expand-icon {
+    position: relative;
+    z-index: 1;
+}
+
+/* Loading State Animation */
+.loading-item {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading-item .list-item-icon {
+    animation: spin 1s linear infinite;
+}
+
+/* Success Animation */
+@keyframes successPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+    }
+}
+
+.success-item {
+    animation: successPulse 1s ease-out;
+}

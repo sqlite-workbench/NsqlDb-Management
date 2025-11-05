@@ -15,21 +15,27 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MainListItems from './MainListItems';
 import {useHistory} from "react-router-dom"
 import RunQuery from './RunQuery';
+import './Dashboard.css';
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)',
+  transition: theme.transitions.create(['width', 'margin', 'box-shadow'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  '&:hover': {
+    boxShadow: '0 6px 30px rgba(102, 126, 234, 0.4)',
+  },
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(['width', 'margin', 'box-shadow'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -42,6 +48,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
       position: 'relative',
       whiteSpace: 'nowrap',
       width: drawerWidth,
+      background: 'linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%)',
+      borderRight: '1px solid rgba(102, 126, 234, 0.1)',
+      boxShadow: '4px 0 20px rgba(0, 0, 0, 0.05)',
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -77,10 +86,10 @@ function DashboardContent() {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
+        <AppBar position="absolute" open={open} className="dashboard-appbar">
           <Toolbar
             sx={{
-              pr: '24px', // keep right padding when drawer closed
+              pr: '24px',
             }}
           >
             <IconButton
@@ -88,6 +97,7 @@ function DashboardContent() {
               color="inherit"
               aria-label="open drawer"
               onClick={toggleDrawer}
+              className="menu-icon-button"
               sx={{
                 marginRight: '36px',
                 ...(open && { display: 'none' }),
@@ -95,51 +105,59 @@ function DashboardContent() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              "{localStorage.getItem("dbname")}" Database
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1 }}>
+              <span className="database-icon">💾</span>
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                className="database-title"
+              >
+                {localStorage.getItem("dbname")}
+              </Typography>
+              <span className="database-badge">Active</span>
+            </Box>
           </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" open={open} className="dashboard-drawer">
           <Toolbar
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
+              justifyContent: 'space-between',
+              px: [2],
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             }}
           >
-            <IconButton onClick={toggleDrawer}>
+            <Typography variant="h6" sx={{ color: 'white', fontWeight: 600, display: open ? 'block' : 'none' }}>
+              📊 Menu
+            </Typography>
+            <IconButton onClick={toggleDrawer} sx={{ color: 'white' }} className="close-drawer-button">
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
-          <Divider />
-          <List component="nav">
+          <Divider sx={{ borderColor: 'rgba(102, 126, 234, 0.2)' }} />
+          <List component="nav" sx={{ px: 1, py: 2 }}>
             <MainListItems handleSetContent={handleSetContent}/>
-            
           </List>
         </Drawer>
         <Box
           component="main"
+          className="dashboard-main-content"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
+            backgroundColor: '#f8f9fa',
+            backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.05) 0%, transparent 50%)',
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" >
-            {getContent}
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Box className="content-wrapper">
+              {getContent}
+            </Box>
           </Container>
         </Box>
       </Box>

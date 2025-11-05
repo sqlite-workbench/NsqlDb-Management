@@ -6,6 +6,11 @@ import RunQuery from './RunQuery'
 import DbDialog from './DbDialog'
 import ContextRouter from '../contextAPI/ContextRouter'
 import CreateTable from './CreateTable'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import AddIcon from '@mui/icons-material/Add'
+import TableChartIcon from '@mui/icons-material/TableChart'
+import '../CSS/tabledata.css'
+
 export default function TableData(props) {
     const context=useContext(ContextRouter)
     const [getData,setData]=useState({data:[]})
@@ -64,26 +69,48 @@ export default function TableData(props) {
     }
     
   return (
-    <div style={{display:"flex",flexDirection:"column"}}>
-        <Grid containor>
-            <Grid item xs={12} style={{fontSize:30,fontWeight:"350",textDecoration:"lowercase",textAlign:"center",margin:20,textTransform:"uppercase"}}>
-        {context.getTable}
-            </Grid>
-            <Grid xs={6} style={{margin:20,display:"flex"}}>
-                <div className='ct-addcolumn' style={{width:"15%"}}>
-                    <button  onClick={handleDropTable} >Drop Table</button>
-                </div>
-                <div style={{width:"15%"}} className='ct-addcolumn'>
+    <div className="table-data-container">
+        {/* Header Section */}
+        <div className="table-header">
+            <div className="table-title-wrapper">
+                <TableChartIcon className="table-icon" />
+                <h2 className="table-title">{context.getTable}</h2>
+                <span className="table-badge">
+                    {getData['data'].length} {getData['data'].length === 1 ? 'row' : 'rows'}
+                </span>
+            </div>
+            
+            <div className="table-actions">
+                <button className="action-btn add-btn" onClick={() => setOpen(true)}>
+                    <AddIcon className="btn-icon" />
+                    <span>Add Data</span>
+                </button>
+                <button className="action-btn drop-btn" onClick={handleDropTable}>
+                    <DeleteOutlineIcon className="btn-icon" />
+                    <span>Drop Table</span>
+                </button>
+            </div>
+        </div>
 
-                    <button  onClick={()=>setOpen(true)} >Add Data</button>
-                </div>
-            </Grid>
-            <Grid xs={12} style={{marginBottom:20}}>
+        {/* Table Content */}
+        <div className="table-content">
+            <DbTable 
+                getDataUrl={getDataUrl} 
+                tablename={context.getTable} 
+                rows={getData['data']} 
+                columns={getColumn['column']}
+            />
+        </div>
 
-    <DbTable getDataUrl={getDataUrl} tablename={context.getTable} rows={getData['data']} columns={getColumn['column']}/>
-            </Grid>
-        </Grid>
-    <DbDialog key={1} tablename={context.getTable} fetchData={getDataUrl} column={getColumn['column']} setOpen={setOpen} open={getOpen}/>
+        {/* Dialog */}
+        <DbDialog 
+            key={1} 
+            tablename={context.getTable} 
+            fetchData={getDataUrl} 
+            column={getColumn['column']} 
+            setOpen={setOpen} 
+            open={getOpen}
+        />
     </div> 
   )
 }

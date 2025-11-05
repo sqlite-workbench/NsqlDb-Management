@@ -18,6 +18,8 @@ import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import PrintIcon from '@mui/icons-material/Print';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
 import DeleteIcon from '@mui/icons-material/Delete';
+import StorageIcon from '@mui/icons-material/Storage';
+import AddIcon from '@mui/icons-material/Add';
 import "../CSS/userdashboard.css"
 import DbManagment from "./DbManagment";
 import UploadDatabase from "./UploadDatabase";
@@ -96,66 +98,85 @@ const actions = [
   return(
   <TabContext value={getValue}>
     <div className='dashboard-main-div'>
+        {/* Animated Background */}
+        <div className='dashboard-background'>
+          <div className='bg-shape bg-shape-1'></div>
+          <div className='bg-shape bg-shape-2'></div>
+          <div className='bg-shape bg-shape-3'></div>
+        </div>
+        
         <div className='dashboard-sub-div'>
-            <div className='dahsboard-top-bar'>
+            <div className='dashboard-top-bar'>
               <div className='databases-list'>
-                <Select
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={context.getDatabase}
-                label="Database"
-                style={{width:"70%",height:"80%"}}
-                onChange={handleChangeVal}
-                >
-                {context.getDatabaseList.map((item)=>{
-                  return <MenuItem value={item.databasename}>{item.databasename}</MenuItem>
-                })
-              }
-                </Select>
+                <div className='database-selector-wrapper'>
+                  <StorageIcon className='database-icon' />
+                  <Select
+                    labelId="demo-select-small"
+                    id="demo-select-small"
+                    value={context.getDatabase}
+                    label="Database"
+                    className='database-select'
+                    onChange={handleChangeVal}
+                  >
+                    {context.getDatabaseList.map((item)=>{
+                      return <MenuItem key={item.databasename} value={item.databasename} className='database-menu-item'>{item.databasename}</MenuItem>
+                    })
+                  }
+                  </Select>
+                </div>
               </div>
               <div className="switch-options">
-                <TabList  onChange={handleChange}>
-                  <Tab label="Execute Query" value="0" />
-                  <Tab label="Data" value="1" />
+                <TabList onChange={handleChange} className='custom-tab-list'>
+                  <Tab label="Execute Query" value="0" className='custom-tab' />
+                  <Tab label="Data" value="1" className='custom-tab' />
                 </TabList>
               </div>
-              <div className="add-new" onClick={()=>{handleSetContent(<DbManagment key={1} heading={"Create Db"} isOpen={false}/>)}}>
-                    Create New Database
-              </div>
-              <div className="add-new" onClick={()=>{handleSetContent(<UploadDatabase/>)}}>
-                    Upload Database
+              <div className="action-buttons">
+                <button className="add-new btn-primary" onClick={()=>{handleSetContent(<DbManagment key={1} heading={"Create Db"} isOpen={false}/>)}}>
+                  <AddIcon className='btn-icon' />
+                  <span>Create Database</span>
+                </button>
+                <button className="add-new btn-secondary" onClick={()=>{handleSetContent(<UploadDatabase/>)}}>
+                  <CloudUploadIcon className='btn-icon' />
+                  <span>Upload Database</span>
+                </button>
               </div>
             </div>
             <div className='dashboard-bottom-bar'>
                 <div className='dashboard-left-window'>
-                    <List>
+                    <div className='sidebar-header'>
+                      <span className='sidebar-icon'>📋</span>
+                      <span className='sidebar-title'>Actions</span>
+                    </div>
+                    <List className='custom-list'>
                       <MainListItems handleSetContent={handleSetContent} handleRemoveDatabase={handleRemoveDatabase}/>
                     </List>
                 </div>
                 <div className='dashboard-right-window'>
-                        <TabPanel value="0">
+                        <TabPanel value="0" className='custom-tab-panel'>
                               <RunQuery setValue={setValue} setComponent={handleSetContent}/>
                         </TabPanel>
-                        <TabPanel value="1">
+                        <TabPanel value="1" className='custom-tab-panel'>
                               {getContext}
                         </TabPanel>
                 </div>
-                <div>
-                <SpeedDial
-                    ariaLabel="SpeedDial basic example"
-                    sx={{ position:"absolute",bottom:16,right:16 }}
-                    icon={<SpeedDialIcon />}
-
-                  >
-                    {actions.map((action) => (
-                      <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                        onClick={action.click}
-                      />
-                    ))}
-                  </SpeedDial>
+                <div className='speed-dial-wrapper'>
+                  <SpeedDial
+                      ariaLabel="SpeedDial basic example"
+                      className='custom-speed-dial'
+                      sx={{ position:"absolute",bottom:16,right:16 }}
+                      icon={<SpeedDialIcon />}
+                    >
+                      {actions.map((action) => (
+                        <SpeedDialAction
+                          key={action.name}
+                          icon={action.icon}
+                          tooltipTitle={action.name}
+                          onClick={action.click}
+                          className='speed-dial-action'
+                        />
+                      ))}
+                    </SpeedDial>
                 </div>
             </div>
         </div>

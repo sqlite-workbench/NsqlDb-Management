@@ -8,38 +8,51 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import {fetchResponse,updateResponse} from "../BackendServices/FetchServices"
 import { useContext } from 'react';
 import ContextRouter from '../contextAPI/ContextRouter';
+import '../CSS/dbdialog.css';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
+    padding: theme.spacing(3),
   },
   '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
+    padding: theme.spacing(2),
+  },
+  '& .MuiPaper-root': {
+    borderRadius: '16px',
+    boxShadow: '0 20px 60px rgba(102, 126, 234, 0.3)',
+    overflow: 'visible',
   },
 }));
 
 const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props;
+  const { children, onClose, isUpdate, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
+    <DialogTitle sx={{ m: 0, p: 0 }} {...other}>
+      <div className="dialog-header">
+        <div className="dialog-header-content">
+          {isUpdate ? (
+            <EditIcon className="dialog-header-icon" />
+          ) : (
+            <AddIcon className="dialog-header-icon" />
+          )}
+          <span className="dialog-title">{children}</span>
+        </div>
+        {onClose ? (
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            className="dialog-close-btn"
+          >
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </div>
     </DialogTitle>
   );
 };
@@ -47,6 +60,7 @@ const BootstrapDialogTitle = (props) => {
 BootstrapDialogTitle.propTypes = {
   children: PropTypes.node,
   onClose: PropTypes.func.isRequired,
+  isUpdate: PropTypes.bool,
 };
 
 export default function DbDialog(props) {
@@ -132,27 +146,56 @@ const handleAddRecord=async()=>{
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={props.open}
+        maxWidth="sm"
+        fullWidth
       >
-        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+        <BootstrapDialogTitle 
+          id="customized-dialog-title" 
+          onClose={handleClose}
+          isUpdate={props.isUpdate}
+        >
           {props.isUpdate?"Update":"Add"} Record
         </BootstrapDialogTitle>
-        <DialogContent dividers style={{width:"500px"}}>
-            <Grid containor style={{width:"99%"}}>
+        <DialogContent dividers className="dialog-content">
+            <div className="dialog-form">
                 {
-                    Object.keys(getValues).map((item)=>{
+                    Object.keys(getValues).map((item, index)=>{
                         let val=getValues[item];
                         return(
-                            <Grid item xs={12}>
-                                <TextField value={props.isUpdate?val.new:val}  style={{margin:10}} variant="outlined" label={item} fullWidth onChange={(e)=>{handleChange(e,item)}} />
-                            </Grid>
+                            <div key={index} className="form-field">
+                                <div className="field-label">
+                                    <span className="field-icon">📝</span>
+                                    <span className="field-name">{item}</span>
+                                </div>
+                                <TextField 
+                                    value={props.isUpdate?val.new:val}  
+                                    variant="outlined" 
+                                    placeholder={`Enter ${item}`}
+                                    fullWidth 
+                                    className="dialog-input"
+                                    onChange={(e)=>{handleChange(e,item)}} 
+                                />
+                            </div>
                         )
                     })
                 }
-            </Grid>
+            </div>
         </DialogContent> 
-        <DialogActions>
-          <Button autoFocus onClick={handleAddRecord}>
-          {props.isUpdate?"Update":"Add"} Record
+        <DialogActions className="dialog-actions">
+          <Button 
+            onClick={handleClose}
+            className="dialog-cancel-btn"
+            variant="outlined"
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleAddRecord}
+            className={props.isUpdate ? "dialog-update-btn" : "dialog-add-btn"}
+            variant="contained"
+            startIcon={props.isUpdate ? <SaveIcon /> : <AddIcon />}
+          >
+            {props.isUpdate?"Update":"Add"} Record
           </Button>
         </DialogActions>
       </BootstrapDialog>

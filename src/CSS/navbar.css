@@ -1,22 +1,173 @@
-.nav-head{
-    background-color: white;
-    box-shadow: 2px 2px 2px gray;
-    height: 65px;
+/* Navbar Container */
+.nav-head {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    height: 80px;
     width: 100%;
     position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2em;
-    font-style: italic;
-    font-weight: 350;
-    cursor: default;
-    letter-spacing: 0.5px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
 }
-.nav-head img{
-    width: 12%;
-    height: 98%;
+
+.nav-head:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
-body{
+
+/* Inner Container */
+.nav-container {
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Brand Section */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.nav-brand:hover {
+    transform: translateY(-2px);
+}
+
+/* Logo */
+.nav-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: logoFloat 3s ease-in-out infinite;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover {
+    transform: rotate(360deg) scale(1.1);
+}
+
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Title */
+.nav-title {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #fff, transparent);
+    transition: width 0.3s ease;
+}
+
+.nav-brand:hover .nav-title::after {
+    width: 100%;
+}
+
+/* Tagline */
+.nav-tagline {
+    font-size: 0.95em;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.nav-tagline:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-head {
+        height: 70px;
+    }
+    
+    .nav-container {
+        padding: 0 20px;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .nav-logo {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .nav-title {
+        font-size: 1.5em;
+        letter-spacing: 1px;
+    }
+    
+    .nav-tagline {
+        font-size: 0.7em;
+        padding: 5px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-head {
+        height: 65px;
+    }
+    
+    .nav-brand {
+        gap: 10px;
+    }
+    
+    .nav-logo {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .nav-title {
+        font-size: 1.3em;
+    }
+    
+    .nav-tagline {
+        display: none;
+    }
+}
+
+/* Body Styling */
+body {
     user-select: none;
+    margin: 0;
+    padding: 0;
 }

@@ -1,8 +1,12 @@
 import React,{useState} from 'react';
-import {Grid,Button} from "@mui/material"
+import {Button} from "@mui/material"
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import StorageIcon from '@mui/icons-material/Storage';
 import {postRequestFile} from "../BackendServices/FetchServices"
 import { useContext } from 'react';
 import ContextRouter from '../contextAPI/ContextRouter';
+import '../CSS/uploaddatabase.css';
 export default function UploadDatabase(props) {
     const [getDb,setDb]=useState({filename:"",bytes:""})
     const context=useContext(ContextRouter)
@@ -11,11 +15,13 @@ export default function UploadDatabase(props) {
     }
     const handleClick=async()=>{
             if(getDb.bytes!=="" && getDb.filename.endsWith(".db")){
+                context.setLoader(true)
                 let body=new FormData()
                 body.append("database",getDb.bytes)
                 body.append("Dbfilename",getDb.filename)
                 let config={headers:{"content-type":"multipart/form-data",auth:localStorage.getItem("auth")}}
                 let res=await postRequestFile("/uploaddb",body,config,false)
+                context.setLoader(false)
                 if(res.status){
                     let filename=(res.filename)
                     filename=filename===undefined || filename===null?"":filename
@@ -28,6 +34,8 @@ export default function UploadDatabase(props) {
                         context.setDatabaseList(arr);
                         context.setDatabase(filename);
                         context.setAlert({status:true,msg:"Database Uploaded Successfully",color:"green"})
+                        // Reset the form
+                        setDb({filename:"",bytes:""})
                     }
                 }
                 else{
@@ -39,61 +47,95 @@ export default function UploadDatabase(props) {
             }
     }
     return (
-    // <div style={{display:"flex",flexDirection:"row",justifyContent:"center",aliginItems:"center",width:"100%",marginTop:40}}>
-    //    <Grid containor style={{border:"2px solid black",borderRadius:20,padding:20}}> 
-    //         <Grid xs={12} style={{margin:5,fontSize:30,fontWeight:"bold",textAlign:"center"}}>
-    //             Upload Database
-    //         </Grid>
-    //         <Grid xs={12} style={{margin:5}}>
-        //     <input
-        // accept=".db"
-        // id="contained-button-file"
-        // type="file"
-        // style={{display:"none"}}
-        // onChange={(event)=>handleDb(event)}
-    //   />
-    //   <label htmlFor="contained-button-file">
-    //     <Button variant="contained" color={getDb.bytes===""?"primary":"secondary"} component="span">
-    //     {getDb.bytes===""?"Select Database":"Selected"}
-    //     <br/>
-    //     {getDb.filename}
-    //     </Button>
-    //   </label>
-    //         </Grid>
-    //         <Grid xs={12} style={{margin:5,marginTop:20}}>
-    //             <Button variant="outlined" fullWidth color="primary" onClick={handleClick} >Upload Database</Button>
-    //         </Grid>
-    //     </Grid> 
-    // </div>
-    <div className='main-div-crdb'>
-                <div className='sub-div-crdb'>
-                        <div className='heading'>
-                        Upload Database
-                        </div>
-                        <div className='crdb-text-area'>
-                        <input
-                         accept=".db"
-                         id="contained-button-file"
-                         type="file"
-                         style={{display:"none"}}
-                         onChange={(event)=>handleDb(event)}  />  
-                         <label htmlFor="contained-button-file">
-                    <Button fullWidth variant="contained" style={{backgroundColor:getDb.bytes===""?"skyblue":"rgb(40, 40, 78)",color:"white"}} component="span">
-                    <div style={{display:"flex",justifyContent:"space-evenly"}}>
-                    <div style={{marginInline:5}}>
-                    {getDb.bytes===""?"Select Database":"Selected"} 
+        <div className='upload-db-container'>
+            <div className='upload-db-card'>
+                {/* Header */}
+                <div className='upload-header'>
+                    <div className='header-content'>
+                        <StorageIcon className='header-icon' />
+                        <h2 className='header-title'>Upload Database</h2>
                     </div>
-                    <div>
-                    {getDb.filename===""?"":`( ${getDb.filename} )`}
-                    </div>
-                    </div>
-                    </Button>
-      </label>
-                        </div>
-                        <div className='crdb-btn'>
-                            <button onClick={handleClick}>Upload Database</button>
-                        </div>
+                    <p className='header-subtitle'>
+                        Upload your SQLite database file (.db) to get started
+                    </p>
                 </div>
+
+                {/* Upload Area */}
+                <div className='upload-area'>
+                    <input
+                        accept=".db"
+                        id="database-file-upload"
+                        type="file"
+                        className="file-input-hidden"
+                        onChange={(event)=>handleDb(event)}
+                    />
+                    
+                    <label htmlFor="database-file-upload" className='file-upload-label'>
+                        <div className={`upload-box ${getDb.bytes !== "" ? 'file-selected' : ''}`}>
+                            <div className='upload-icon-wrapper'>
+                                {getDb.bytes === "" ? (
+                                    <CloudUploadIcon className='upload-icon' />
+                                ) : (
+                                    <CheckCircleIcon className='upload-icon success-icon' />
+                                )}
+                            </div>
+                            <div className='upload-text'>
+                                <span className='upload-main-text'>
+                                    {getDb.bytes === "" ? "Choose a database file" : "File selected successfully"}
+                                </span>
+                                <span className='upload-sub-text'>
+                                    {getDb.bytes === "" ? "Click to browse or drag and drop" : getDb.filename}
+                                </span>
+                            </div>
+                            {getDb.bytes === "" ? (
+                                <Button 
+                                    variant="outlined" 
+                                    component="span"
+                                    className='browse-button'
+                                    startIcon={<CloudUploadIcon />}
+                                >
+                                    Browse Files
+                                </Button>
+                            ) : (
+                                <div className='file-info'>
+                                    <StorageIcon className='file-icon' />
+                                    <span className='file-name'>{getDb.filename}</span>
+                                </div>
+                            )}
+                        </div>
+                    </label>
+
+                    {/* Upload Button */}
+                    <div className='upload-button-wrapper'>
+                        <Button
+                            variant="contained"
+                            fullWidth
+                            className={`upload-submit-btn ${getDb.bytes === "" ? 'disabled' : ''}`}
+                            onClick={handleClick}
+                            disabled={getDb.bytes === ""}
+                            startIcon={<CloudUploadIcon />}
+                        >
+                            Upload Database
+                        </Button>
+                    </div>
+                </div>
+
+                {/* Info Section */}
+                <div className='upload-info'>
+                    <div className='info-item'>
+                        <span className='info-icon'>📄</span>
+                        <span className='info-text'>Only .db files are supported</span>
+                    </div>
+                    <div className='info-item'>
+                        <span className='info-icon'>🔒</span>
+                        <span className='info-text'>Your data is secure and encrypted</span>
+                    </div>
+                    <div className='info-item'>
+                        <span className='info-icon'>⚡</span>
+                        <span className='info-text'>Fast and reliable upload</span>
+                    </div>
+                </div>
+            </div>
         </div>
-  );
+    );
 }
